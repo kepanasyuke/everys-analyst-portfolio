@@ -2,13 +2,14 @@
 
 from __future__ import annotations
 
-from fastapi import FastAPI
-from fastapi.responses import FileResponse
+from fastapi import FastAPI, Request
+from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 
 from app.ai import llm
 from app.core.catalog import PROJECTS
 from app.core.store import ROOT, corpus_stats
+from app.officine.errors import OfficineError
 from app.officine.repo import ensure_schema
 from app.officine.router import router as officine
 from projects.p01_requirements.router import router as p01
@@ -28,6 +29,11 @@ for router in (p01, p02, p03, p04, p05, p06, p07, p08, officine):
     app.include_router(router)
 
 ensure_schema()
+
+
+@app.exception_handler(OfficineError)
+def officine_error_handler(request: Request, error: OfficineError) -> JSONResponse:
+    return JSONResponse(status_code=error.status, content={"detail": error.message})
 
 
 @app.get("/")

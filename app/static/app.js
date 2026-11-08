@@ -6,6 +6,7 @@ import catalog from "./views/catalog.js";
 import counter from "./views/counter.js";
 import stock from "./views/stock.js";
 import pharmacies from "./views/pharmacies.js";
+import sales from "./views/sales.js";
 import p01 from "./views/p01.js";
 import p02 from "./views/p02.js";
 import p03 from "./views/p03.js";
@@ -17,7 +18,7 @@ import p08 from "./views/p08.js";
 
 const GROUPS = [
   { title: "", views: [home] },
-  { title: "Приложение officine", views: [dashboard, catalog, counter, stock, pharmacies] },
+  { title: "Приложение officine", views: [dashboard, catalog, counter, stock, sales, pharmacies] },
   { title: "Портфолио · AI-инструменты", views: [p01, p02, p03, p04, p05, p06, p07, p08] },
 ];
 const VIEWS = GROUPS.flatMap((group) => group.views);

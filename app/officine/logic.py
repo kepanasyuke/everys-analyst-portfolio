@@ -375,18 +375,40 @@ def cancel_sale(sale_id: int, acteur: str = DEFAULT_ACTOR) -> dict:
     return run_transaction(lambda connection: reverse_sale(connection, sale_id, acteur))
 
 
-def list_sales(statut: str = "", limit: int = 25) -> list[dict]:
-    where, params = ("statut = ?", [statut]) if statut else ("1=1", [])
-    return read(f"{SALE_BASE} WHERE {where} ORDER BY v.date DESC, v.id DESC LIMIT ?", (*params, limit))
+def statut_clause(statut: str) -> list[tuple[str, list]]:
+    return [("v.statut = ?", [statut])] if statut else []
+
+
+def from_clause(date_from: str) -> list[tuple[str, list]]:
+    return [("v.date >= ?", [date_from])] if date_from else []
+
+
+def to_clause(date_to: str) -> list[tuple[str, list]]:
+    return [("v.date <= ?", [date_to])] if date_to else []
+
+
+def sale_filter(statut: str, date_from: str, date_to: str) -> tuple[str, list]:
+    clauses = [*statut_clause(statut), *from_clause(date_from), *to_clause(date_to)]
+    return " AND ".join(clause for clause, _ in clauses) or "1=1", [value for _, params in clauses for value in params]
+
+
+def list_sales(statut: str = "", limit: int = 25, date_from: str = "", date_to: str = "", offset: int = 0) -> list[dict]:
+    where, params = sale_filter(statut, date_from, date_to)
+    return read(f"{SALE_BASE} WHERE {where} ORDER BY v.date DESC, v.id DESC LIMIT ? OFFSET ?", (*params, limit, offset))
+
+
+def sales_page(statut: str = "", limit: int = 25, date_from: str = "", date_to: str = "", offset: int = 0) -> dict:
+    where, params = sale_filter(statut, date_from, date_to)
+    return {"items": list_sales(statut, limit, date_from, date_to, offset), "total": int(one(f"SELECT COUNT(*) AS n FROM ventes v WHERE {where}", tuple(params))["n"]), "limit": limit, "offset": offset}
 
 
 def reference_date() -> str:
     return str(one("SELECT MAX(date) AS d FROM ventes").get("d") or date.today().isoformat())
 
 
-def kpi() -> dict:
-    period = one("SELECT COUNT(*) AS ventes, COALESCE(SUM(montant_ttc),0) AS ca, COALESCE(AVG(montant_ttc),0) AS panier FROM ventes WHERE statut = 'validee' AND date >= date(?, '-30 day')", (reference_date(),))
-    return {"ca": money(period["ca"]), "ventes": int(period["ventes"]), "panier": money(period["panier"]), "aujourdhui": int(one("SELECT COUNT(*) AS n FROM ventes WHERE date = ?", (date.today().isoformat(),))["n"]), "reference": reference_date(), "ruptures": int(one("SELECT COUNT(*) AS n FROM produits WHERE stock_actuel <= seuil")["n"]), "valeur_stock": money(one("SELECT SUM(prix_public * stock_actuel) AS v FROM produits")["v"] or 0)}
+def kpi(days: int = 30) -> dict:
+    period = one(f"SELECT COUNT(*) AS ventes, COALESCE(SUM(montant_ttc),0) AS ca, COALESCE(AVG(montant_ttc),0) AS panier FROM ventes WHERE statut = 'validee' AND date >= date(?, '-{int(days)} day')", (reference_date(),))
+    return {"ca": money(period["ca"]), "ventes": int(period["ventes"]), "panier": money(period["panier"]), "days": int(days), "aujourdhui": int(one("SELECT COUNT(*) AS n FROM ventes WHERE date = ?", (date.today().isoformat(),))["n"]), "reference": reference_date(), "ruptures": int(one("SELECT COUNT(*) AS n FROM produits WHERE stock_actuel <= seuil")["n"]), "valeur_stock": money(one("SELECT SUM(prix_public * stock_actuel) AS v FROM produits")["v"] or 0)}
 
 
 def alerts(limit: int = 12) -> list[dict]:
@@ -405,5 +427,5 @@ def journal(limit: int = 20) -> list[dict]:
     return read("SELECT id, ts, acteur, action, cible, details FROM journal ORDER BY id DESC LIMIT ?", (limit,))
 
 
-def overview() -> dict:
-    return {"kpi": kpi(), "alerts": alerts(6), "top": top_products(5), "recent": list_sales("", 8), "journal": journal(6), "categories": categories()}
+def overview(days: int = 30) -> dict:
+    return {"kpi": kpi(days), "alerts": alerts(6), "top": top_products(5), "recent": list_sales("", 8), "journal": journal(6), "categories": categories()}

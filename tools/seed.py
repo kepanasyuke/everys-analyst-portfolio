@@ -69,8 +69,11 @@ CANAUX = ["comptoir", "comptoir", "comptoir", "drive", "livraison"]
 REMISES = [0, 0, 0, 0, 5, 10, 20]
 STATUTS = ["validee", "validee", "validee", "validee", "validee", "annulee", "en_attente"]
 SCHEMA = """
-DROP TABLE IF EXISTS ventes;
+DROP TABLE IF EXISTS lignes_retour;
+DROP TABLE IF EXISTS retours;
+DROP TABLE IF EXISTS journal;
 DROP TABLE IF EXISTS lignes_vente;
+DROP TABLE IF EXISTS ventes;
 DROP TABLE IF EXISTS produits;
 DROP TABLE IF EXISTS officines;
 
@@ -79,7 +82,7 @@ CREATE TABLE officines (
     nom TEXT NOT NULL,
     ville TEXT NOT NULL,
     region TEXT NOT NULL,
-    surface_m2 INTEGER NOT NULL
+    surface_m2 INTEGER NOT NULL CHECK (surface_m2 > 0)
 );
 
 CREATE TABLE produits (
@@ -87,11 +90,11 @@ CREATE TABLE produits (
     nom TEXT NOT NULL,
     dci TEXT NOT NULL,
     categorie TEXT NOT NULL,
-    prix_public REAL NOT NULL,
-    taux_remboursement INTEGER NOT NULL,
-    thermosensible INTEGER NOT NULL,
-    stock_actuel INTEGER NOT NULL,
-    seuil INTEGER NOT NULL
+    prix_public REAL NOT NULL CHECK (prix_public > 0),
+    taux_remboursement INTEGER NOT NULL CHECK (taux_remboursement BETWEEN 0 AND 100),
+    thermosensible INTEGER NOT NULL CHECK (thermosensible IN (0, 1)),
+    stock_actuel INTEGER NOT NULL CHECK (stock_actuel >= 0),
+    seuil INTEGER NOT NULL CHECK (seuil >= 0)
 );
 
 CREATE TABLE ventes (
@@ -99,9 +102,9 @@ CREATE TABLE ventes (
     officine_id INTEGER NOT NULL,
     date TEXT NOT NULL,
     canal TEXT NOT NULL,
-    statut TEXT NOT NULL,
-    remise_pct INTEGER NOT NULL,
-    montant_ttc REAL NOT NULL,
+    statut TEXT NOT NULL CHECK (statut IN ('validee', 'annulee', 'en_attente')),
+    remise_pct INTEGER NOT NULL CHECK (remise_pct BETWEEN 0 AND 100),
+    montant_ttc REAL NOT NULL CHECK (montant_ttc >= 0),
     FOREIGN KEY (officine_id) REFERENCES officines (id)
 );
 
@@ -109,8 +112,8 @@ CREATE TABLE lignes_vente (
     id INTEGER PRIMARY KEY,
     vente_id INTEGER NOT NULL,
     cip TEXT NOT NULL,
-    quantite INTEGER NOT NULL,
-    prix_unitaire REAL NOT NULL,
+    quantite INTEGER NOT NULL CHECK (quantite > 0),
+    prix_unitaire REAL NOT NULL CHECK (prix_unitaire >= 0),
     FOREIGN KEY (vente_id) REFERENCES ventes (id),
     FOREIGN KEY (cip) REFERENCES produits (cip)
 );

@@ -3,8 +3,8 @@ import { eur, errorBox, esc, num, pageHead, qty, statusTag, stats, table, tag, w
 
 function kpiBlock(kpi) {
   return stats([
-    ["Выручка · 30 дней", eur(kpi.ca)],
-    ["Продаж · 30 дней", qty(kpi.ventes)],
+    ["Выручка за период", eur(kpi.ca)],
+    ["Продаж за период", qty(kpi.ventes)],
     ["Средний чек", eur(kpi.panier)],
     ["Позиций в дефиците", qty(kpi.ruptures), kpi.ruptures ? "bad" : "good"],
     ["Стоимость склада", eur(kpi.valeur_stock)],
@@ -35,7 +35,7 @@ function render(data) {
   document.getElementById("top").innerHTML = topBlock(data.top);
   document.getElementById("sales").innerHTML = salesBlock(data.recent);
   document.getElementById("journal").innerHTML = journalBlock(data.journal);
-  document.getElementById("stamp").textContent = `данные по ${data.kpi.reference} · обновлено ${new Date().toLocaleTimeString("ru-RU")}`;
+  document.getElementById("stamp").textContent = `данные по ${data.kpi.reference} · период ${data.kpi.days} дн. · обновлено ${new Date().toLocaleTimeString("ru-RU")}`;
 }
 
 export default {
@@ -46,7 +46,7 @@ export default {
   async mount(root) {
     root.innerHTML = `${pageHead("Приложение officine · дашборд", "Рабочее место аптеки: продажи, остатки, журнал",
       "Живые данные из SQLite: каждая продажа, пополнение и отмена пишутся в журнал и меняют остаток. Ниже — что происходит в сети за последние 30 дней данных.")}
-      <div class="btn-row"><button class="btn" id="refresh">Обновить</button><span class="muted" id="stamp"></span></div>
+      <div class="btn-row"><select id="days" style="max-width:180px"><option value="7">7 дней</option><option value="30" selected>30 дней</option><option value="90">90 дней</option></select><button class="btn" id="refresh">Обновить</button><a class="btn ghost" href="/api/app/export/sales.csv" download>Выгрузить продажи CSV</a><span class="muted" id="stamp"></span></div>
       <div id="kpi"></div>
       <div class="split">
         <div>
@@ -59,7 +59,8 @@ export default {
         </div>
       </div>`;
     const load = async (button) => {
-      const result = await withSpinner(button, () => get("/api/app/overview"));
+      const days = document.getElementById("days").value;
+      const result = await withSpinner(button, () => get(`/api/app/overview?days=${days}`));
       if (result.ok) render(result.value);
       else document.getElementById("kpi").innerHTML = errorBox(result.error);
     };

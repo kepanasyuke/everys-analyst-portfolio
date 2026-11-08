@@ -9,7 +9,7 @@ function rowsOf(items) {
     qty(item.stock_actuel),
     qty(item.seuil),
     `${statusTag(item.statut_stock)} ${tag(`${item.taux_remboursement} %`, "grey")}`,
-    `<button class="btn ghost small" data-edit="${esc(item.cip)}">Править</button>`,
+    `<span class="row-actions"><button class="btn ghost small" data-edit="${esc(item.cip)}">Править</button><button class="btn ghost small" data-history="${esc(item.cip)}">История</button></span>`,
   ]);
 }
 
@@ -54,6 +54,20 @@ function createForm(categories) {
   </details>`;
 }
 
+function historyBlock(data) {
+  const rows = data.items.map((move) => [
+    esc(String(move.ts).slice(0, 16).replace("T", " ")),
+    tag(move.kind === "sale" ? "расход" : move.kind === "return" ? "возврат" : "приход", move.quantite > 0 ? "green" : "amber"),
+    `${move.quantite > 0 ? "+" : ""}${qty(move.quantite)}`,
+    esc(move.ref),
+  ]);
+  return `<div class="card">
+    <div class="btn-row"><h3>${esc(data.product.nom)} — движения</h3></div>
+    ${stats([["Остаток", qty(data.product.stock_actuel)], ["Порог", qty(data.product.seuil)], ["Цена", eur(data.product.prix_public)]])}
+    ${rows.length ? table(["Когда", "Тип", "Кол-во", "Источник"], rows) : `<p class="muted">Движений ещё не было.</p>`}
+  </div>`;
+}
+
 export default {
   slug: "catalog",
   code: "A1",
@@ -68,9 +82,11 @@ export default {
           <input type="text" id="q" placeholder="Название, DCI или CIP13" value="" style="max-width:280px" />
           <select id="cat"><option value="">Все категории</option></select>
           <button class="btn" id="search">Найти</button>
+          <a class="btn ghost" href="/api/app/export/products.csv" download>Выгрузить CSV</a>
         </div>
       </div>
       <div id="table"></div>
+      <div id="history"></div>
       <div id="editor"></div>
       <div id="create-slot"></div>`;
     const load = async (button, query = true) => {
@@ -97,6 +113,11 @@ export default {
     root.addEventListener("click", async (event) => {
       const edit = event.target.closest("[data-edit]");
       if (edit) openEditor(edit.dataset.edit);
+      const history = event.target.closest("[data-history]");
+      if (history) {
+        const result = await get(`/api/app/products/${history.dataset.history}/movements`);
+        document.getElementById("history").innerHTML = historyBlock(result);
+      }
     });
     document.getElementById("search").addEventListener("click", (event) => load(event.currentTarget));
     document.getElementById("editor").addEventListener("click", async (event) => {

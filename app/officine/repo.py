@@ -9,6 +9,7 @@ from datetime import UTC, datetime
 from typing import Callable
 
 from app.core.store import DB
+from app.officine.errors import require
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS journal (
@@ -21,7 +22,30 @@ CREATE TABLE IF NOT EXISTS journal (
 );
 CREATE INDEX IF NOT EXISTS idx_journal_ts ON journal (ts DESC);
 CREATE INDEX IF NOT EXISTS idx_ventes_date ON ventes (date);
+CREATE TABLE IF NOT EXISTS retours (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    vente_id INTEGER NOT NULL,
+    ts TEXT NOT NULL,
+    acteur TEXT NOT NULL,
+    role TEXT NOT NULL,
+    montant REAL NOT NULL CHECK (montant >= 0),
+    FOREIGN KEY (vente_id) REFERENCES ventes (id)
+);
+CREATE TABLE IF NOT EXISTS lignes_retour (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    retour_id INTEGER NOT NULL,
+    cip TEXT NOT NULL,
+    quantite INTEGER NOT NULL CHECK (quantite > 0),
+    prix_unitaire REAL NOT NULL CHECK (prix_unitaire >= 0),
+    FOREIGN KEY (retour_id) REFERENCES retours (id),
+    FOREIGN KEY (cip) REFERENCES produits (cip)
+);
+CREATE INDEX IF NOT EXISTS idx_retours_vente ON retours (vente_id);
+CREATE INDEX IF NOT EXISTS idx_lignes_retour_cip ON lignes_retour (cip);
+CREATE INDEX IF NOT EXISTS idx_lignes_vente_cip ON lignes_vente (cip);
 """
+
+ATTEMPTS = 5
 
 
 def now() -> str:
@@ -57,8 +81,34 @@ def one(sql: str, params: tuple = ()) -> dict:
 
 
 def run_transaction(worker: Callable[[sqlite3.Connection], dict]) -> dict:
+    return retried(worker, ATTEMPTS)
+
+
+def retried(worker: Callable[[sqlite3.Connection], dict], attempts: int) -> dict:
     with closing(connect()) as connection:
-        return committed(connection, worker)
+        return attempt(connection, worker, attempts)
+
+
+def attempt(connection: sqlite3.Connection, worker: Callable[[sqlite3.Connection], dict], attempts: int) -> dict:
+    try:
+        result, error = committed(connection, worker), None
+    except sqlite3.OperationalError as failure:
+        result, error = None, failure
+    return retry_result(result, error, worker, attempts)
+
+
+def retry_result(result, error, worker: Callable[[sqlite3.Connection], dict], attempts: int) -> dict:
+    return result if error is None else retry_or_fail(worker, attempts, error)
+
+
+def retry_or_fail(worker: Callable[[sqlite3.Connection], dict], attempts: int, error: sqlite3.OperationalError) -> dict:
+    require(is_lock(error) and attempts > 1, f"База занята: {error}", 503)
+    return retried(worker, attempts - 1)
+
+
+def is_lock(error: sqlite3.OperationalError) -> bool:
+    text = str(error).lower()
+    return "locked" in text or "busy" in text
 
 
 def committed(connection: sqlite3.Connection, worker: Callable[[sqlite3.Connection], dict]) -> dict:

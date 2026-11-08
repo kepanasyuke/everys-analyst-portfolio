@@ -17,12 +17,14 @@ function basketBlock(basket) {
     .join("")}</div>`;
 }
 
-function cancelCell(item) {
-  return item.statut === "validee" ? `<button class="btn ghost small" data-cancel="${esc(item.id)}">Отменить</button>` : `<span class="muted">отменена</span>`;
+function actionCell(item) {
+  const receipt = `<a class="btn ghost small" href="/api/app/sales/${esc(item.id)}/receipt" target="_blank" rel="noopener">Чек</a>`;
+  const cancel = item.statut === "validee" ? `<button class="btn ghost small" data-cancel="${esc(item.id)}">Отменить</button>` : "";
+  return `<span class="row-actions">${receipt}${cancel}<a class="btn ghost small" href="#/sales">Возврат</a></span>`;
 }
 
 function saleRow(item) {
-  return [esc(item.id), esc(item.date), esc(item.ville), eur(item.montant_ttc), cancelCell(item)];
+  return [esc(item.id), esc(item.date), esc(item.ville), eur(item.montant_ttc), actionCell(item)];
 }
 
 function receipt(data) {
@@ -65,7 +67,7 @@ export default {
           </div>
           <div id="receipt"></div>
           <div class="card">
-            <h3>Последние продажи</h3>
+            <h3>Последние продажи · <a href="#/sales">весь архив</a></h3>
             <div id="recent"></div>
           </div>
         </div>

@@ -1,11 +1,12 @@
-"""HTTP-контракт приложения офисины: каталог, касса, склад, сеть, журнал."""
+"""HTTP-контракт приложения офисины: каталог, касса, склад, сеть, журнал, возвраты, выгрузки."""
 
 from __future__ import annotations
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Response
+from fastapi.responses import HTMLResponse
 from pydantic import BaseModel, Field
 
-from app.officine import logic
+from app.officine import exports, logic, receipt, returns
 from app.officine.errors import OfficineError
 
 router = APIRouter(prefix="/api/app", tags=["officine app"])
@@ -20,6 +21,12 @@ class SaleRequest(BaseModel):
     officine_id: int = Field(default=1, ge=1, le=9999)
     canal: str = Field(default="comptoir", max_length=20)
     remise_pct: float = Field(default=0, ge=0, le=100)
+    lignes: list[Line] = Field(default_factory=list)
+    acteur: str = Field(default="pharmacien", max_length=60)
+    role: str = Field(default="pharmacien", pattern="^(pharmacien|titulaire)$")
+
+
+class ReturnRequest(BaseModel):
     lignes: list[Line] = Field(default_factory=list)
     acteur: str = Field(default="pharmacien", max_length=60)
     role: str = Field(default="pharmacien", pattern="^(pharmacien|titulaire)$")
@@ -59,19 +66,28 @@ def guarded(call) -> dict:
     return result
 
 
+def page_size(limit: int) -> int:
+    return min(max(limit, 1), 200)
+
+
 @router.get("/overview")
-def overview() -> dict:
-    return logic.overview()
+def overview(days: int = 30) -> dict:
+    return logic.overview(min(max(days, 1), 365))
 
 
 @router.get("/products")
 def products(q: str = "", category: str = "", limit: int = 80) -> dict:
-    return logic.list_products(q, category, min(max(limit, 1), 200))
+    return logic.list_products(q, category, page_size(limit))
 
 
 @router.post("/products")
 def create_product(payload: ProductRequest) -> dict:
     return guarded(lambda: logic.create_product(payload.model_dump()))
+
+
+@router.get("/products/{cip}/movements")
+def movements(cip: str, limit: int = 30) -> dict:
+    return guarded(lambda: returns.movements(cip, page_size(limit)))
 
 
 @router.patch("/products/{cip}")
@@ -91,17 +107,22 @@ def delete_product(cip: str, acteur: str = "pharmacien") -> dict:
 
 @router.get("/stock")
 def stock(limit: int = 40) -> dict:
-    return {"alerts": logic.alerts(min(max(limit, 1), 200)), "kpi": logic.kpi()}
+    return {"alerts": logic.alerts(page_size(limit)), "kpi": logic.kpi()}
 
 
 @router.get("/sales")
-def sales(statut: str = "", limit: int = 25) -> dict:
-    return {"items": logic.list_sales(statut, min(max(limit, 1), 100))}
+def sales(statut: str = "", date_from: str = "", date_to: str = "", limit: int = 25, offset: int = 0) -> dict:
+    return logic.sales_page(statut, page_size(limit), date_from, date_to, max(offset, 0))
 
 
 @router.get("/sales/{sale_id}")
 def sale(sale_id: int) -> dict:
-    return guarded(lambda: logic.sale_detail(sale_id))
+    return guarded(lambda: {**logic.sale_detail(sale_id), "retours": returns.returns_of(sale_id)})
+
+
+@router.get("/sales/{sale_id}/returns")
+def sale_returns(sale_id: int) -> dict:
+    return {"items": returns.returns_of(sale_id)}
 
 
 @router.post("/sales")
@@ -109,9 +130,19 @@ def create_sale(payload: SaleRequest) -> dict:
     return guarded(lambda: logic.create_sale(payload.model_dump()))
 
 
+@router.post("/sales/{sale_id}/return")
+def create_return(sale_id: int, payload: ReturnRequest) -> dict:
+    return guarded(lambda: returns.create_return({"sale_id": sale_id, **payload.model_dump()}))
+
+
 @router.post("/sales/{sale_id}/cancel")
 def cancel_sale(sale_id: int, acteur: str = "pharmacien") -> dict:
     return guarded(lambda: logic.cancel_sale(sale_id, acteur))
+
+
+@router.get("/sales/{sale_id}/receipt", response_class=HTMLResponse)
+def sale_receipt(sale_id: int) -> str:
+    return receipt.receipt_html(sale_id)
 
 
 @router.get("/pharmacies")
@@ -121,4 +152,14 @@ def pharmacies() -> dict:
 
 @router.get("/journal")
 def journal(limit: int = 20) -> dict:
-    return {"items": logic.journal(min(max(limit, 1), 100))}
+    return {"items": logic.journal(page_size(limit))}
+
+
+@router.get("/export/sales.csv")
+def export_sales(date_from: str = "", date_to: str = "") -> Response:
+    return Response(content=exports.sales_csv(date_from, date_to), media_type="text/csv; charset=utf-8", headers={"Content-Disposition": 'attachment; filename="sales.csv"'})
+
+
+@router.get("/export/products.csv")
+def export_products() -> Response:
+    return Response(content=exports.products_csv(), media_type="text/csv; charset=utf-8", headers={"Content-Disposition": 'attachment; filename="products.csv"'})

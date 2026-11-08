@@ -1,4 +1,4 @@
-# Everys · Portfolio analyste système / produit
+﻿# Everys · Portfolio analyste système / produit
 
 Projet de démonstration pour le poste d'**analyste système / produit** chez Everys (France,
 produit **WinPharma**, bureau de Moscou).
@@ -121,6 +121,24 @@ Les données sont modifiables : `python tools/seed.py` restaure l'état initial 
 
 ---
 
+### Retours, archive et exports
+
+- **Retours** (`POST /api/app/sales/{id}/return`) : partiels ou complets. Le montant est recalculé avec
+  la remise de la vente, la marchandise revient en stock, le journal enregistre `sale.return`. Impossible
+  de retourner plus que vendu ou une vente annulée — `409`.
+- **Historique article** (`GET /api/app/products/{cip}/movements`) : ventes, retours et réassorts dans
+  une seule chronologie.
+- **Archive des ventes** (`#/sales`) : filtres par date et statut, pagination, ticket et retour depuis
+  la ligne.
+- **Ticket imprimable** (`GET /api/app/sales/{id}/receipt`) : page HTML autonome avec styles d'impression.
+- **Exports** (`/api/app/export/sales.csv`, `…/products.csv`) : CSV avec `;` et BOM, lisible par Excel
+  sans réglage d'encodage.
+- **Fiabilité** : 20 tests HTTP via `TestClient`, contraintes CHECK dans le schéma (`prix_public > 0`,
+  `stock_actuel >= 0`, `quantite > 0`, `montant_ttc >= 0`), nouvelle tentative en cas de verrou SQLite
+  (5 essais, puis `503`).
+
+---
+
 ## Lien avec l'offre
 
 | Attendu chez Everys | Où c'est traité |
@@ -232,7 +250,7 @@ combinaisons « écran × largeur », les libellés longs et les tableaux se rep
 
 ```powershell
 $env:PYTHONPATH = "."
-python -m pytest -q      # 80 passed : 49 analytiques + 31 opérationnels
+python -m pytest -q      # 100 passed : noyau IA, huit projets et application officine
 python tools/smoke.py    # 14 contrôles API, tous en 200
 python tools/audit_ui.py # cohérence id / endpoints / statique du frontend
 node tools/ui-smoke.mjs  # 14 écrans rendus contre le serveur réel

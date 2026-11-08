@@ -58,6 +58,8 @@ class Element {
 }
 
 const SELECT_RE = /<select data-gate="([^"]+)">([\s\S]*?)<\/select>/g;
+const SELECT_ID_RE = /<select[^>]*id="([^"]+)"[^>]*>([\s\S]*?)<\/select>/g;
+const FIRST_OPTION_RE = /<option value="([^"]+)"/;
 const SELECTED_RE = /<option value="([^"]+)" selected/;
 
 function register(html) {
@@ -65,6 +67,7 @@ function register(html) {
   [...html.matchAll(VALUE_RE)].forEach(([, id, value]) => Object.assign(element(id), { value }));
   [...html.matchAll(TEXTAREA_RE)].forEach(([, id, text]) => Object.assign(element(id), { value: unescapeHtml(text) }));
   [...html.matchAll(SELECT_RE)].forEach(([, gate, body]) => Object.assign(element(`gate:${gate}`), { dataset: { gate }, value: (body.match(SELECTED_RE) || [null, "fail"])[1] }));
+  [...html.matchAll(SELECT_ID_RE)].forEach(([, id, body]) => Object.assign(element(id), { value: (body.match(SELECTED_RE) || body.match(FIRST_OPTION_RE) || [null, ""])[1] }));
 }
 
 function unescapeHtml(text) {
@@ -88,10 +91,11 @@ const settle = (ms = 1200) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const CASES = [
   { file: "home.js", label: "Обзор", marker: "Восемь рабочих инструментов", button: null },
-  { file: "dashboard.js", label: "A0 рабочее место", marker: "Выручка · 30 дней", button: "refresh" },
+  { file: "dashboard.js", label: "A0 рабочее место", marker: "Выручка за период", button: "refresh" },
   { file: "catalog.js", label: "A1 каталог", marker: "Стоимость выборки", button: "search" },
   { file: "counter.js", label: "A2 касса", marker: "остаток", button: null },
   { file: "stock.js", label: "A3 склад", marker: "Позиций под угрозой", button: "refresh" },
+  { file: "sales.js", label: "A5 архив", marker: "Продаж по фильтру", button: "apply" },
   { file: "pharmacies.js", label: "A4 сеть", marker: "Аптек в сети", button: "refresh" },
   { file: "p01.js", label: "P01 требования", marker: "Критерии приёмки", button: "run" },
   { file: "p02.js", label: "P02 SQL Lab", marker: "Что это значит", button: "run" },
