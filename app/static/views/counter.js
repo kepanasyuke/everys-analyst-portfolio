@@ -47,8 +47,10 @@ export default {
             <div class="grid two">
               <label>Аптека<select id="off"></select></label>
               <label>Канал<select id="canal"><option value="comptoir">comptoir</option><option value="drive">drive</option><option value="livraison">livraison</option></select></label>
+              <label>Роль<select id="role"><option value="pharmacien">фармацевт</option><option value="titulaire">титуляр</option></select></label>
               <label>Скидка, %<input type="number" id="remise" min="0" max="30" step="1" value="0" /></label>
             </div>
+            <p class="muted" id="rule">Фармацевт: скидка до 30 %. Выше — только титуляр, с записью в журнал.</p>
           </div>
           <div class="card">
             <label>Найти товар<input type="text" id="q" placeholder="Название или CIP13" /></label>
@@ -96,6 +98,13 @@ export default {
 
     document.getElementById("q").addEventListener("input", (event) => paintPicker(event.target.value));
     document.getElementById("remise").addEventListener("input", paint);
+    document.getElementById("role").addEventListener("change", (event) => {
+      const titulaire = event.target.value === "titulaire";
+      document.getElementById("remise").max = titulaire ? "100" : "30";
+      document.getElementById("rule").textContent = titulaire
+        ? "Титуляр: скидка до 100 %, каждое подтверждение попадает в журнал."
+        : "Фармацевт: скидка до 30 %. Выше — только титуляр, с записью в журнал.";
+    });
     document.getElementById("picker").addEventListener("click", (event) => {
       const button = event.target.closest("[data-add]");
       const item = button && state.catalog.find((entry) => entry.cip === button.dataset.add);
@@ -123,6 +132,8 @@ export default {
         officine_id: Number(document.getElementById("off").value),
         canal: document.getElementById("canal").value,
         remise_pct: Number(document.getElementById("remise").value) || 0,
+        role: document.getElementById("role").value,
+        acteur: document.getElementById("role").value,
         lignes: state.basket.map((line) => ({ cip: line.cip, quantite: line.quantite })),
       };
       const result = await withSpinner(event.currentTarget, () => post("/api/app/sales", body));

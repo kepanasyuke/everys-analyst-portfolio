@@ -106,7 +106,8 @@ Le portfolio est devenu une application qui fonctionne : même base `data/offici
    décrémentées et le ticket créé, soit rien ne change.
 2. Le stock ne passe jamais en négatif : quantité demandée > stock → `409` avec le restant.
 3. Deux lignes du même CIP sont fusionnées : impossible de décrémenter deux fois la même position.
-4. Remise supérieure à 30 % → `409` « nécessite l'accord du titulaire » (règle de la spécification).
+4. Rôle en caisse : pharmacien jusqu'à 30 %, titulaire jusqu'à 100 %. Au-delà → `409`,
+   le rôle et le montant de la remise sont journalisés.
 5. L'annulation remet la marchandise en stock et passe le ticket en `annulee` ; double annulation → `409`.
 6. Un article déjà vendu ne peut pas être supprimé (`409`) — seul le stock peut être mis à zéro.
 7. Chaque action est écrite dans la table `journal` : qui, quoi, quand, sur quel objet.
@@ -231,7 +232,7 @@ combinaisons « écran × largeur », les libellés longs et les tableaux se rep
 
 ```powershell
 $env:PYTHONPATH = "."
-python -m pytest -q      # 76 passed : 49 analytiques + 27 opérationnels
+python -m pytest -q      # 80 passed : 49 analytiques + 31 opérationnels
 python tools/smoke.py    # 14 contrôles API, tous en 200
 python tools/audit_ui.py # cohérence id / endpoints / statique du frontend
 node tools/ui-smoke.mjs  # 14 écrans rendus contre le serveur réel

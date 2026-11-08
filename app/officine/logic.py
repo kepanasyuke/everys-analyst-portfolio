@@ -14,6 +14,8 @@ from app.officine.repo import log, one, read, rows_of, run_transaction
 
 CIP_RE = re.compile(r"^\d{13}$")
 DEFAULT_ACTOR = "pharmacien"
+ROLES = ("pharmacien", "titulaire")
+ROLE_LIMITS = {"pharmacien": 30.0, "titulaire": 100.0}
 EDITABLE = ("prix_public", "stock_actuel", "seuil", "taux_remboursement")
 FIELDS = ("cip", "nom", "dci", "categorie", "prix_public", "taux_remboursement", "thermosensible", "stock_actuel", "seuil")
 INSERT_SQL = f"INSERT INTO produits ({', '.join(FIELDS)}) VALUES ({', '.join('?' * len(FIELDS))})"
@@ -229,18 +231,27 @@ def resolve_lines(connection, lignes: list) -> list[dict]:
     return [resolve_line(connection, item) for item in merge_lines(lignes)]
 
 
-def remise_of(value) -> float:
+def role_of(payload: dict) -> str:
+    role = str(payload.get("role") or DEFAULT_ACTOR)
+    return role if role in ROLES else DEFAULT_ACTOR
+
+
+def remise_of(value, role: str = DEFAULT_ACTOR) -> float:
     remise = max(0.0, float(value or 0))
-    return checked_remise(remise)
+    return checked_remise(remise, role)
 
 
-def checked_remise(remise: float) -> float:
-    require(remise <= 30, "Скидка выше 30 % требует подтверждения титуляра", 409)
+def checked_remise(remise: float, role: str) -> float:
+    require(remise <= ROLE_LIMITS.get(role, 30.0), remise_message(role), 409)
     return remise
 
 
-def total_of(lines: list[dict], remise) -> float:
-    return round(sum(line["prix"] * line["quantite"] for line in lines) * (1 - remise_of(remise) / 100), 2)
+def remise_message(role: str) -> str:
+    return "Скидка не может превышать 100 %" if role == "titulaire" else "Скидка выше 30 % требует подтверждения титуляра"
+
+
+def total_of(lines: list[dict], remise, role: str = DEFAULT_ACTOR) -> float:
+    return round(sum(line["prix"] * line["quantite"] for line in lines) * (1 - remise_of(remise, role) / 100), 2)
 
 
 def officine_id(payload: dict) -> int:
@@ -254,7 +265,7 @@ def known_officine(value: int) -> int:
 
 
 def insert_sale(connection, payload: dict, montant: float) -> int:
-    cursor = connection.execute("INSERT INTO ventes (officine_id, date, canal, statut, remise_pct, montant_ttc) VALUES (?,?,?,?,?,?)", (officine_id(payload), date.today().isoformat(), str(payload.get("canal") or "comptoir"), "validee", int(remise_of(payload.get("remise_pct"))), montant))
+    cursor = connection.execute("INSERT INTO ventes (officine_id, date, canal, statut, remise_pct, montant_ttc) VALUES (?,?,?,?,?,?)", (officine_id(payload), date.today().isoformat(), str(payload.get("canal") or "comptoir"), "validee", int(remise_of(payload.get("remise_pct"), role_of(payload))), montant))
     return int(cursor.lastrowid or 0)
 
 
@@ -311,7 +322,7 @@ def build_sale(connection, payload: dict) -> dict:
 
 
 def persist_sale(connection, payload: dict, lines: list[dict]) -> dict:
-    sale_id = insert_sale(connection, payload, total_of(lines, payload.get("remise_pct")))
+    sale_id = insert_sale(connection, payload, total_of(lines, payload.get("remise_pct"), role_of(payload)))
     return apply_sale(connection, sale_id, lines, payload)
 
 
@@ -326,7 +337,7 @@ def finish_sale(connection, sale_id: int, payload: dict) -> dict:
 
 
 def log_sale(connection, sale_id: int, payload: dict) -> dict:
-    log(connection, actor(payload), "sale.create", str(sale_id), {"remise": payload.get("remise_pct", 0), "canal": payload.get("canal", "comptoir")})
+    log(connection, actor(payload), "sale.create", str(sale_id), {"remise": payload.get("remise_pct", 0), "role": role_of(payload), "canal": payload.get("canal", "comptoir")})
     return detailed_live(connection, sale_row(connection, sale_id))
 
 

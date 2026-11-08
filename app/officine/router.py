@@ -22,6 +22,7 @@ class SaleRequest(BaseModel):
     remise_pct: float = Field(default=0, ge=0, le=100)
     lignes: list[Line] = Field(default_factory=list)
     acteur: str = Field(default="pharmacien", max_length=60)
+    role: str = Field(default="pharmacien", pattern="^(pharmacien|titulaire)$")
 
 
 class ProductRequest(BaseModel):

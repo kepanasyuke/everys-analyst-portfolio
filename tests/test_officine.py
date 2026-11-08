@@ -217,3 +217,26 @@ def test_list_products_filters_by_category(database) -> None:
 
 def test_first_product_is_available(database) -> None:
     assert first_product()["cip"]
+
+def recorded_details(call) -> str:
+    call()
+    return logic.journal(1)[0]["details"]
+
+
+def test_unknown_role_falls_back_to_pharmacist(database) -> None:
+    assert logic.role_of({"role": "stagiaire"}) == "pharmacien"
+
+
+def test_pharmacist_cannot_apply_discount_above_limit(database) -> None:
+    logic.create_product(sample_product())
+    assert refusal(lambda: logic.create_sale({"officine_id": 1, "remise_pct": 35, "role": "pharmacien", "lignes": [{"cip": CIP, "quantite": 1}]})).status == 409
+
+
+def test_titulaire_can_apply_discount_above_limit(database) -> None:
+    logic.create_product(sample_product(prix_public=10))
+    assert logic.create_sale({"officine_id": 1, "remise_pct": 35, "role": "titulaire", "lignes": [{"cip": CIP, "quantite": 2}]})["montant_ttc"] == 13.0
+
+
+def test_journal_records_role_of_titulaire(database) -> None:
+    logic.create_product(sample_product())
+    assert "titulaire" in recorded_details(lambda: logic.create_sale({"officine_id": 1, "remise_pct": 35, "role": "titulaire", "lignes": [{"cip": CIP, "quantite": 1}]}))
