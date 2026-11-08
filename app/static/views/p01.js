@@ -1,12 +1,12 @@
 import { get, post } from "../api.js";
-import { chips, errorBox, esc, num, pageHead, stats, tag, withSpinner } from "../ui.js";
+import { chips, errorBox, esc, md, num, pageHead, stats, tag, withSpinner } from "../ui.js";
 
 function criterion(item, index) {
   return `<div class="card">
     <span class="meta">AC-${String(index + 1).padStart(2, "0")} · ${esc(item.kind)} · ${esc(item.value)}</span>
     <p><strong>Given.</strong> ${esc(item.given)}</p>
     <p><strong>When.</strong> ${esc(item.when)}</p>
-    <p><strong>Then.</strong> ${esc(item.then)}</p>
+    <p><strong>Then.</strong> ${md(item.then)}</p>
     <span class="muted">источник: ${esc(item.source)}</span>
   </div>`;
 }
@@ -58,7 +58,7 @@ function report(data) {
       ${verification(data.verification || {})}
       <div class="card">
         <h3>Использованные фрагменты</h3>
-        ${(data.context || []).map((hit) => `<p><span class="muted">${esc(hit.id)} · score ${num(hit.score, 2)}</span><br>${esc(hit.text)}</p>`).join("")}
+        ${(data.context || []).map((hit) => `<p><span class="muted">${esc(hit.id)} · score ${num(hit.score, 2)}</span><br>${md(hit.text)}</p>`).join("")}
       </div>
     </div>
   </div>`;

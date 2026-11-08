@@ -1,11 +1,11 @@
 import { get, post } from "../api.js";
-import { errorBox, esc, note, pageHead, stats, tag, withSpinner } from "../ui.js";
+import { errorBox, esc, md, note, pageHead, stats, tag, withSpinner } from "../ui.js";
 
 function side(entry, tone) {
   return `<div>
     <div class="btn-row">${tag(entry.value, tone)}<span class="muted">${esc(entry.doc)}</span></div>
     <p class="muted">${esc(entry.title)}</p>
-    <p>${esc(entry.text)}</p>
+    <p>${md(entry.text)}</p>
   </div>`;
 }
 

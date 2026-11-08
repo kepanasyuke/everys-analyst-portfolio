@@ -187,6 +187,10 @@ Repris du site de l'entreprise (`moscow.everys.com`, page carrières, CSS inline
 | Ombre | `0 0 10px rgba(0,0,0,.10)`, survol `0 10px 10px` | cartes |
 | Logo | letter-spacing 1,5 px, capitales | barre latérale |
 
+Captures d'écran dans `screenshots/view-*.png` (bureau 1440, portable 1100, mobile 390).
+La mise en page est vérifiée dans Edge headless : aucun débordement horizontal sur les 27
+combinaisons « écran × largeur », les libellés longs et les tableaux se replient dans les cartes.
+
 ---
 
 ## Tests

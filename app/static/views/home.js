@@ -24,6 +24,11 @@ function hero(catalog) {
   </section>`;
 }
 
+function providerLabel(ai) {
+  const provider = (ai || {}).provider || "—";
+  return provider === "local-deterministic" ? "local · BM25" : provider;
+}
+
 function overview(catalog) {
   const corpus = catalog.corpus || {};
   return stats([
@@ -31,7 +36,7 @@ function overview(catalog) {
     ["Документов в корпусе", String(corpus.documents ?? "—")],
     ["Фрагментов для RAG", String(corpus.chunks ?? "—")],
     ["Терминов в индексе", String(corpus.terms ?? "—")],
-    ["AI-провайдер", (catalog.ai || {}).provider ?? "—"],
+    ["AI-провайдер", providerLabel(catalog.ai)],
   ]);
 }
 

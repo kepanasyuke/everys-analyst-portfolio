@@ -6,6 +6,11 @@ const PAD_BOTTOM = 28;
 
 export const esc = (value) => String(value ?? "").replace(/[&<>"']/g, (char) => ENTITIES[char]);
 
+export const md = (value) =>
+  esc(value)
+    .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
+    .replace(/(^|\s)_([^_]+)_(?=\s|$)/g, "$1<em>$2</em>");
+
 export const num = (value, digits = 2) => (Number.isFinite(Number(value)) ? Number(value).toFixed(digits).replace(".", ",") : "—");
 
 export const pct = (value) => `${num(Number(value) * 100, 1)} %`;
@@ -31,7 +36,7 @@ export function table(columns, rows) {
   const body = rows
     .map((row) => `<tr>${row.map((cell) => `<td>${cell ?? ""}</td>`).join("")}</tr>`)
     .join("");
-  return `<table><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table>`;
+  return `<div class="table-wrap"><table><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table></div>`;
 }
 
 export function codeBlock(code) {

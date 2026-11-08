@@ -11,8 +11,7 @@ function gateRow(gate) {
   const options = STATUSES.map(([value, label]) => `<option value="${value}" ${gate.status === value ? "selected" : ""}>${label}</option>`).join("");
   return `<tr>
     <td>${esc(gate.title_ru)}<br><span class="muted">${esc(gate.id)} · вес ${gate.weight}${gate.blocker ? " · блокер" : ""}</span></td>
-    <td><select data-gate="${esc(gate.id)}">${options}</select></td>
-    <td>${tag(gate.status, gate.status === "done" ? "green" : gate.status === "warn" ? "amber" : "red")}</td>
+    <td class="gate-cell"><select data-gate="${esc(gate.id)}">${options}</select></td>
   </tr>`;
 }
 
@@ -51,7 +50,7 @@ export default {
         <div class="card">
           <h3>Чек-лист версии</h3>
           <label>Версия<input type="text" id="version" value="2026.1" /></label>
-          <table><thead><tr><th>Ворота</th><th>Статус</th><th></th></tr></thead><tbody>${seeded.map(gateRow).join("")}</tbody></table>
+          <table><thead><tr><th>Ворота</th><th class="gate-cell">Статус</th></tr></thead><tbody>${seeded.map(gateRow).join("")}</tbody></table>
           <div class="btn-row"><button class="btn" id="run">Оценить готовность</button><button class="btn ghost" id="preset">Вернуть данные 2026.1</button></div>
         </div>
         <div id="out"><div class="card"><h3>Вердикт появится здесь</h3></div></div>

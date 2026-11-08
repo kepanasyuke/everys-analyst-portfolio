@@ -1,5 +1,5 @@
 import { get, post } from "../api.js";
-import { chips, errorBox, esc, note, pageHead, stats, tag, withSpinner } from "../ui.js";
+import { chips, errorBox, esc, md, note, pageHead, stats, tag, withSpinner } from "../ui.js";
 
 const PRIORITY_TONE = { P1: "red", P2: "amber", P3: "grey" };
 
@@ -9,7 +9,7 @@ function caseCard(item) {
     <h3>${esc(item.title)}</h3>
     <p><strong>Предусловие.</strong> ${esc(item.precondition)}</p>
     <p><strong>Шаги.</strong> ${esc(item.steps)}</p>
-    <p><strong>Ожидаемый результат.</strong> ${esc(item.expected)}</p>
+    <p><strong>Ожидаемый результат.</strong> ${md(item.expected)}</p>
     <p class="muted">${esc(item.risk)}</p>
   </div>`;
 }

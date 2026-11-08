@@ -1,12 +1,12 @@
 import { get, post, query } from "../api.js";
-import { chips, errorBox, esc, pageHead, stats, tag, withSpinner } from "../ui.js";
+import { chips, errorBox, esc, md, pageHead, stats, tag, withSpinner } from "../ui.js";
 
 function termCard(entry) {
   return `<div class="card">
     <div class="btn-row">${tag(entry.domain_label, "grey")}${tag(`в корпусе: ${entry.uses}`, entry.uses ? "green" : "amber")}</div>
     <h3>${esc(entry.fr)} <span class="muted">→ ${esc(entry.ru)}</span></h3>
-    <p>${esc(entry.def_fr)}</p>
-    <p>${esc(entry.def_ru)}</p>
+    <p>${md(entry.def_fr)}</p>
+    <p>${md(entry.def_ru)}</p>
     ${(entry.synonyms || []).length ? `<p class="muted">Синонимы: ${entry.synonyms.map(esc).join(", ")}</p>` : ""}
     ${(entry.examples || []).length ? `<p class="muted">Пример: ${esc(entry.examples[0])}</p>` : ""}
   </div>`;
