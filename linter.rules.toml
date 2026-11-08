@@ -1,0 +1,20 @@
+# Правила стиля кода (контракт из вакансии Everys)
+# Автоматически проверяются: tools/lint_rules.py (stdlib) и ruff (если установлен).
+#
+# 1. Один выход из функции: ровно один return, никаких ранних выходов.
+# 2. Функция — 1–2 строки тела (docstring не считается).
+# 3. Запрещены while, break, continue.
+# 4. Выражения вместо накопления: списковые включения, генераторы, dict-dispatch.
+
+targets = ["app", "projects", "tests"]
+
+[lint]
+# Эквивалентные настройки для ruff (если установлен):
+# ruff check .
+# ruff format --check .
+line-length = 100
+max-statements = 2
+max-returns = 1
+
+[banned]
+statements = ["while", "break", "continue"]

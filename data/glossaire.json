@@ -1,0 +1,272 @@
+[
+  {
+    "fr": "officine",
+    "ru": "аптека (официальная)",
+    "domain": "structure",
+    "def_fr": "Pharmacie d'officine ouverte au public, lieu de dispensation des médicaments.",
+    "def_ru": "Аптека, открытая для населения: точка выдачи лекарств и парафармации.",
+    "synonyms": ["pharmacie", "apothicairerie"],
+    "examples": ["L'officine est ouverte de 8h30 à 19h30.", "Аптека работает до 19:30."]
+  },
+  {
+    "fr": "ordonnance",
+    "ru": "рецепт",
+    "domain": "dispensation",
+    "def_fr": "Prescription médicale écrite permettant la délivrance de médicaments.",
+    "def_ru": "Врачебный рецепт, дающий право на выдачу лекарств.",
+    "synonyms": ["prescription"],
+    "examples": ["Une ordonnance datée de plus de 12 mois est refusée."]
+  },
+  {
+    "fr": "délivrance",
+    "ru": "выдача (отпуск) лекарства",
+    "domain": "dispensation",
+    "def_fr": "Acte de remise des médicaments au patient, avec conseil pharmaceutique.",
+    "def_ru": "Факт выдачи лекарства пациенту с фармацевтической консультацией.",
+    "synonyms": ["dispensation"],
+    "examples": ["La délivrance partielle laisse un reliquat ouvert 30 jours."]
+  },
+  {
+    "fr": "tiers payant",
+    "ru": "оплата третьим лицом (страховкой)",
+    "domain": "remboursement",
+    "def_fr": "Mécanisme où la part assurance maladie n'est pas encaissée au comptoir.",
+    "def_ru": "Схема, при которой долю страховой кассы аптека не берёт с пациента.",
+    "synonyms": ["TP"],
+    "examples": ["En tiers payant, la créance est transmise par télétransmission."]
+  },
+  {
+    "fr": "télétransmission",
+    "ru": "телематическая передача (в кассу)",
+    "domain": "integration",
+    "def_fr": "Envoi électronique des feuilles de soins à l'assurance maladie.",
+    "def_ru": "Электронная отправка рецептов и счетов в страховую кассу.",
+    "synonyms": ["télétransmission SESAM-Vitale"],
+    "examples": ["Un flux rejeté doit être corrigé sous 48 heures."]
+  },
+  {
+    "fr": "créance",
+    "ru": "дебиторская задолженность (сумма к возмещению)",
+    "domain": "remboursement",
+    "def_fr": "Montant dû par l'assurance maladie à l'officine au titre d'une dispensation.",
+    "def_ru": "Сумма, которую страховая касса должна возместить аптеке.",
+    "synonyms": ["créance assurance maladie"],
+    "examples": ["Une créance rejetée non corrigée passe en impayé."]
+  },
+  {
+    "fr": "rupture",
+    "ru": "дефектура (отсутствие товара)",
+    "domain": "stock",
+    "def_fr": "Situation où le stock disponible d'un article est nul.",
+    "def_ru": "Ситуация, когда доступный остаток товара равен нулю.",
+    "synonyms": ["rupture de stock"],
+    "examples": ["Le taux de rupture se calcule sur 30 jours glissants."]
+  },
+  {
+    "fr": "réassort",
+    "ru": "пополнение запаса (дозаказ)",
+    "domain": "stock",
+    "def_fr": "Proposition de réapprovisionnement générée à partir du seuil de stock.",
+    "def_ru": "Предложение дозаказа товара, рассчитанное от порогового остатка.",
+    "synonyms": ["réapprovisionnement"],
+    "examples": ["Le réassort est proposé chaque jour à 18 h 00."]
+  },
+  {
+    "fr": "seuil de réapprovisionnement",
+    "ru": "порог пополнения",
+    "domain": "stock",
+    "def_fr": "Niveau de stock disponible déclenchant une alerte de commande.",
+    "def_ru": "Уровень остатка, при котором формируется сигнал на заказ.",
+    "synonyms": ["seuil", "stock minimum"],
+    "examples": ["Disponible inférieur ou égal au seuil génère une alerte."]
+  },
+  {
+    "fr": "CIP13",
+    "ru": "CIP13 (код упаковки лекарства)",
+    "domain": "referentiel",
+    "def_fr": "Code identifiant à 13 chiffres d'une présentation de médicament.",
+    "def_ru": "13-значный идентификатор конкретной упаковки лекарства.",
+    "synonyms": ["code CIP"],
+    "examples": ["Chaque ligne de prescription porte un code CIP13."]
+  },
+  {
+    "fr": "princeps",
+    "ru": "оригинальный препарат",
+    "domain": "referentiel",
+    "def_fr": "Médicament de marque, référent de son groupe générique.",
+    "def_ru": "Брендовый препарат — эталон своей группы дженериков.",
+    "synonyms": ["médicament de marque"],
+    "examples": ["Le princeps est substituable sauf mention contraire du prescripteur."]
+  },
+  {
+    "fr": "générique",
+    "ru": "дженерик",
+    "domain": "referentiel",
+    "def_fr": "Médicament équivalent d'un princeps, substituable en officine.",
+    "def_ru": "Воспроизведённый препарат, взаимозаменяемый с оригиналом.",
+    "synonyms": ["substituable"],
+    "examples": ["La substitution doit être tracée dans le journal d'audit."]
+  },
+  {
+    "fr": "stupéfiant",
+    "ru": "наркотическое средство (строгий учёт)",
+    "domain": "reglementation",
+    "def_fr": "Médicament soumis à une réglementation renforcée et à un double contrôle.",
+    "def_ru": "Препарат строгого учёта с усиленным контролем отпуска.",
+    "synonyms": ["médicament stupéfiant"],
+    "examples": ["La durée maximale d'une prescription de stupéfiants est de 28 jours."]
+  },
+  {
+    "fr": "chaîne du froid",
+    "ru": "холодовая цепь",
+    "domain": "qualite",
+    "def_fr": "Ensemble des moyens maintenant un médicament dans sa plage de température.",
+    "def_ru": "Комплекс мер по поддержанию температурного режима препарата.",
+    "synonyms": ["conservation au froid"],
+    "examples": ["Les thermosensibles sont conservés entre +2 °C et +8 °C."]
+  },
+  {
+    "fr": "lot",
+    "ru": "партия (номер партии)",
+    "domain": "qualite",
+    "def_fr": "Ensemble d'unités fabriquées dans les mêmes conditions, identifié par un numéro.",
+    "def_ru": "Партия изделий одного производства, идентифицируемая номером.",
+    "synonyms": ["numéro de lot"],
+    "examples": ["Une sortie de stock sans lot est refusée pour les thermosensibles."]
+  },
+  {
+    "fr": "péremption",
+    "ru": "срок годности",
+    "domain": "qualite",
+    "def_fr": "Date limite d'utilisation d'un médicament, saisie à la réception.",
+    "def_ru": "Предельная дата использования препарата, вводимая при приёмке.",
+    "synonyms": ["date de péremption"],
+    "examples": ["Un article périmé bascule en quarantaine."]
+  },
+  {
+    "fr": "quarantaine",
+    "ru": "карантин (блокировка товара)",
+    "domain": "qualite",
+    "def_fr": "Statut bloquant un article, exclu du stock disponible et de la vente.",
+    "def_ru": "Статус блокировки товара, исключающий его из остатка и продажи.",
+    "synonyms": ["mise en quarantaine"],
+    "examples": ["Un écart de température supérieur à 2 °C met le lot en quarantaine."]
+  },
+  {
+    "fr": "remise",
+    "ru": "скидка",
+    "domain": "caisse",
+    "def_fr": "Réduction en pourcentage appliquée sur le prix public d'une ligne de vente.",
+    "def_ru": "Процентное уменьшение публичной цены в строке продажи.",
+    "synonyms": ["remise commerciale"],
+    "examples": ["La remise s'applique avant le calcul de la TVA."]
+  },
+  {
+    "fr": "panier moyen",
+    "ru": "средний чек",
+    "domain": "pilotage",
+    "def_fr": "Montant TTC moyen d'une vente sur une période donnée.",
+    "def_ru": "Средняя сумма покупки за период.",
+    "synonyms": ["ticket moyen"],
+    "examples": ["Indicateur principal de l'expérimentation caisse."]
+  },
+  {
+    "fr": "marge brute",
+    "ru": "валовая маржа",
+    "domain": "pilotage",
+    "def_fr": "Différence entre le chiffre d'affaires et le coût d'achat des articles vendus.",
+    "def_ru": "Разница между выручкой и закупочной стоимостью проданных товаров.",
+    "synonyms": ["marge"],
+    "examples": ["La marge brute est l'indicateur de garde-fou de l'A/B test."]
+  },
+  {
+    "fr": "titulaire",
+    "ru": "владелец аптеки (титуляр)",
+    "domain": "structure",
+    "def_fr": "Pharmacien propriétaire de l'officine, responsable de l'exploitation.",
+    "def_ru": "Фармацевт — собственник аптеки, ответственный за деятельность.",
+    "synonyms": ["pharmacien titulaire"],
+    "examples": ["Une remise supérieure au seuil exige une validation du titulaire."]
+  },
+  {
+    "fr": "SESAM-Vitale",
+    "ru": "SESAM-Vitale (французская система страхования)",
+    "domain": "integration",
+    "def_fr": "Dispositif français de carte et de flux pour la facturation des soins.",
+    "def_ru": "Французская система карт и потоков для оплаты медицинских услуг.",
+    "synonyms": ["SESAM"],
+    "examples": ["Un flux SESAM-Vitale rejeté doit être corrigé puis retransmis."]
+  },
+  {
+    "fr": "enveloppe SOAP",
+    "ru": "SOAP-конверт",
+    "domain": "integration",
+    "def_fr": "Message XML structuré en en-tête et corps, échangé avec un service web.",
+    "def_ru": "XML-сообщение из заголовка и тела для обмена с веб-сервисом.",
+    "synonyms": ["message SOAP"],
+    "examples": ["L'enveloppe contient un en-tête EnteteSecurite signé."]
+  },
+  {
+    "fr": "idempotence",
+    "ru": "идемпотентность",
+    "domain": "integration",
+    "def_fr": "Propriété d'un appel qui, répété à l'identique, ne modifie pas le résultat.",
+    "def_ru": "Свойство вызова не менять результат при повторной отправке.",
+    "synonyms": ["rejeu sans doublon"],
+    "examples": ["Un renvoi avec le même idFlux ne crée pas de doublon."]
+  },
+  {
+    "fr": "critère d'acceptation",
+    "ru": "критерий приёмки",
+    "domain": "analyse",
+    "def_fr": "Condition vérifiable qui atteste qu'une fonctionnalité est conforme.",
+    "def_ru": "Проверяемое условие соответствия функциональности требованиям.",
+    "synonyms": ["AC"],
+    "examples": ["Étant donné… quand… alors…"]
+  },
+  {
+    "fr": "cas limite",
+    "ru": "граничный сценарий",
+    "domain": "analyse",
+    "def_fr": "Situation en bord de plage de valeurs ou d'état, souvent oubliée en recette.",
+    "def_ru": "Ситуация на границе диапазона значений, часто пропускаемая при тестировании.",
+    "synonyms": ["edge case"],
+    "examples": ["Deux postes vendent le dernier article en même temps."]
+  },
+  {
+    "fr": "flux",
+    "ru": "поток (данных)",
+    "domain": "integration",
+    "def_fr": "Lot de factures transmis en une fois vers l'assurance maladie.",
+    "def_ru": "Набор счетов, отправляемый одним пакетом в кассу.",
+    "synonyms": ["lot de factures"],
+    "examples": ["Chaque flux porte un identifiant unique idFlux."]
+  },
+  {
+    "fr": "avoir",
+    "ru": "сторно (обратная продажа)",
+    "domain": "caisse",
+    "def_fr": "Document qui annule comptablement une vente déjà transmise.",
+    "def_ru": "Документ, сторнирующий уже переданную продажу.",
+    "synonyms": ["note de crédit"],
+    "examples": ["Une vente transmise ne s'annule pas : elle fait l'objet d'un avoir."]
+  },
+  {
+    "fr": "surstock",
+    "ru": "сверхзапас (излишек)",
+    "domain": "stock",
+    "def_fr": "Excédent de stock généré par un réassort trop généreux.",
+    "def_ru": "Излишек остатка из-за слишком щедрого дозаказа.",
+    "synonyms": ["excès de stock"],
+    "examples": ["Risque de surstock si le seuil n'est pas recalculé après migration."]
+  },
+  {
+    "fr": "officine pilote",
+    "ru": "пилотная аптека",
+    "domain": "analyse",
+    "def_fr": "Officine participant à la recette avant diffusion générale.",
+    "def_ru": "Аптека, участвующая в приёмочных испытаниях до общего запуска.",
+    "synonyms": ["site pilote"],
+    "examples": ["Le jeu de régression est validé sur 3 officines pilotes."]
+  }
+]

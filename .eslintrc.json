@@ -1,0 +1,39 @@
+{
+  "root": true,
+  "env": { "browser": true, "es2022": true },
+  "parserOptions": { "ecmaVersion": 2022, "sourceType": "module" },
+  "rules": {
+    "max-statements": ["error", 2],
+    "max-statements-per-line": ["error", 1],
+    "consistent-return": "error",
+    "no-else-return": "error",
+    "no-param-reassign": "error",
+    "no-var": "error",
+    "prefer-const": "error",
+    "no-plusplus": "error",
+    "no-loop-func": "error",
+    "no-await-in-loop": "error",
+    "eqeqeq": ["error", "always"],
+    "curly": ["error", "all"],
+    "max-lines-per-function": ["error", { "max": 60, "skipBlankLines": true, "skipComments": true }],
+    "no-restricted-syntax": [
+      "error",
+      {
+        "selector": "WhileStatement",
+        "message": "while запрещён контрактом стиля Everys"
+      },
+      {
+        "selector": "ContinueStatement",
+        "message": "continue запрещён контрактом стиля Everys"
+      },
+      {
+        "selector": "ForStatement > BreakStatement",
+        "message": "break запрещён контрактом стиля Everys"
+      },
+      {
+        "selector": "SwitchCase > BreakStatement",
+        "message": "break в switch запрещён — используйте объект-диспетчер"
+      }
+    ]
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "source": {
+    "primary": "https://moscow.everys.com/",
+    "product": "https://www.winpharma.com/",
+    "extracted": "2026-11-08",
+    "note": "Токены сняты из инлайн-CSS страницы вакансий Everys (moscow.everys.com) и брендбука WinPharma."
+  },
+  "color": {
+    "violet": "#9e12c9",
+    "violet_dark": "#7a0e9b",
+    "violet_soft": "#f4e6f9",
+    "green": "#4bd411",
+    "green_accent": "#62e620",
+    "green_dark": "#309406",
+    "ink": "#000000",
+    "ink_soft": "#3d3d3d",
+    "muted": "#8a8a8a",
+    "surface": "#ffffff",
+    "surface_alt": "#fafafa",
+    "line": "#e6e6e6"
+  },
+  "radius": {
+    "card": "5px",
+    "button": "30px",
+    "pill": "999px"
+  },
+  "shadow": {
+    "card": "0 0 10px rgba(0, 0, 0, 0.10)",
+    "card_hover": "0 10px 10px rgba(0, 0, 0, 0.10)"
+  },
+  "type": {
+    "family": "Roboto, 'Segoe UI', Arial, sans-serif",
+    "weights": [300, 400, 500, 700],
+    "hero_size": "72px",
+    "title_size": "42px",
+    "body_size": "18px",
+    "logo_letter_spacing": "1.5px"
+  },
+  "motion": {
+    "duration": "0.2s",
+    "easing": "ease-in-out",
+    "properties": ["background-color", "color", "border-color", "box-shadow", "opacity", "transform"]
+  },
+  "voice": {
+    "email": "hr@everys.com",
+    "tagline_ru": "Присоединяйся к международной команде разработчиков Everys WinPharma",
+    "tagline_fr": "Rejoignez l'equipe internationale de developpeurs Everys WinPharma"
+  }
+}
