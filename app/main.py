@@ -9,6 +9,8 @@ from fastapi.staticfiles import StaticFiles
 from app.ai import llm
 from app.core.catalog import PROJECTS
 from app.core.store import ROOT, corpus_stats
+from app.officine.repo import ensure_schema
+from app.officine.router import router as officine
 from projects.p01_requirements.router import router as p01
 from projects.p02_sql_lab.router import router as p02
 from projects.p03_conflicts.router import router as p03
@@ -22,8 +24,10 @@ STATIC = ROOT / "app" / "static"
 app = FastAPI(title="Everys · Analyst Portfolio", version="1.0.0", docs_url="/api/docs", redoc_url=None)
 app.mount("/static", StaticFiles(directory=STATIC), name="static")
 
-for router in (p01, p02, p03, p04, p05, p06, p07, p08):
+for router in (p01, p02, p03, p04, p05, p06, p07, p08, officine):
     app.include_router(router)
+
+ensure_schema()
 
 
 @app.get("/")

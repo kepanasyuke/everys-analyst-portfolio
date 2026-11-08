@@ -13,4 +13,8 @@ export const get = (path) => request(path);
 
 export const post = (path, body) => request(path, { method: "POST", headers: JSON_HEADERS, body: JSON.stringify(body) });
 
+export const patch = (path, body) => request(path, { method: "PATCH", headers: JSON_HEADERS, body: JSON.stringify(body) });
+
+export const remove = (path) => request(path, { method: "DELETE" });
+
 export const query = (path, params) => request(`${path}?${new URLSearchParams(params)}`);

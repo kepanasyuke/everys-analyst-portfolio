@@ -87,6 +87,39 @@ signale les lacunes du dictionnaire.
 
 ---
 
+## Application officine — poste de travail de la pharmacie
+
+Le portfolio est devenu une application qui fonctionne : même base `data/officine.db`, mais en
+écriture. Cinq écrans dans la barre latérale, groupe « Application officine ».
+
+| Écran | Rôle | Endpoints |
+|-------|------|-----------|
+| Poste de travail (`#/app`) | CA sur 30 jours, ruptures, top produits, dernières ventes, journal | `GET /api/app/overview` |
+| Catalogue (`#/catalog`) | Recherche nom/DCI/CIP13, prix et stock, réassort, nouvel article, suppression | `GET/POST /api/app/products`, `PATCH/DELETE /api/app/products/{cip}`, `POST …/restock` |
+| Caisse (`#/counter`) | Panier, remise, vente, ticket, annulation | `GET/POST /api/app/sales`, `POST /api/app/sales/{id}/cancel` |
+| Stock (`#/stock`) | Articles sous le seuil, réassort rapide | `GET /api/app/stock` |
+| Réseau (`#/pharmacies`) | CA et panier moyen des 12 officines | `GET /api/app/pharmacies` |
+
+**Invariants tenus par le backend** (27 tests dans `tests/test_officine.py`) :
+
+1. Une vente s'exécute dans une transaction `BEGIN IMMEDIATE` : soit toutes les lignes sont
+   décrémentées et le ticket créé, soit rien ne change.
+2. Le stock ne passe jamais en négatif : quantité demandée > stock → `409` avec le restant.
+3. Deux lignes du même CIP sont fusionnées : impossible de décrémenter deux fois la même position.
+4. Remise supérieure à 30 % → `409` « nécessite l'accord du titulaire » (règle de la spécification).
+5. L'annulation remet la marchandise en stock et passe le ticket en `annulee` ; double annulation → `409`.
+6. Un article déjà vendu ne peut pas être supprimé (`409`) — seul le stock peut être mis à zéro.
+7. Chaque action est écrite dans la table `journal` : qui, quoi, quand, sur quel objet.
+
+À tester à la main : « Caisse » → ajouter deux articles → « Провести продажу » → le stock du
+« Stock » diminue, une ligne apparaît dans le journal du « Poste de travail » → « Отменить » →
+la marchandise revient, le journal enregistre `sale.cancel`.
+
+Les données sont modifiables : `python tools/seed.py` restaure l'état initial (même graine, mêmes
+1400 ventes).
+
+---
+
 ## Lien avec l'offre
 
 | Attendu chez Everys | Où c'est traité |
@@ -142,7 +175,8 @@ app/
   core/
     store.py           chargement du corpus, découpage par sections, SQLite en lecture seule
     catalog.py         catalogue unique des projets (UI, README, API)
-  static/              interface : brand.css, ui.js, app.js, views/p01…p08.js
+  officine/            application : repo.py (transactions, journal), logic.py, router.py (API)
+  static/              interface : brand.css, ui.js, app.js, views/home + 5 écrans + p01…p08
 projects/p01…p08/      logic.py (domaine) + router.py (contrat HTTP)
 data/docs/             9 spécifications WinPharma en français (corpus RAG)
 data/glossaire.json    30 termes du domaine FR↔RU
@@ -197,8 +231,10 @@ combinaisons « écran × largeur », les libellés longs et les tableaux se rep
 
 ```powershell
 $env:PYTHONPATH = "."
-python -m pytest -q      # 49 passed
-python tools/smoke.py    # 14 contrôles, tous en 200
+python -m pytest -q      # 76 passed : 49 analytiques + 27 opérationnels
+python tools/smoke.py    # 14 contrôles API, tous en 200
+python tools/audit_ui.py # cohérence id / endpoints / statique du frontend
+node tools/ui-smoke.mjs  # 14 écrans rendus contre le serveur réel
 ```
 
 ---

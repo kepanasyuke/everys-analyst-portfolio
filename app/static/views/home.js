@@ -1,5 +1,20 @@
 import { esc, pct, stats, tag } from "../ui.js";
 
+const APP_LINKS = [
+  ["Рабочее место", "app", "Выручка, дефицит, журнал действий"],
+  ["Каталог", "catalog", "Товары, цены, остатки, правка справочника"],
+  ["Касса", "counter", "Корзина, проведение продажи, отмена"],
+  ["Склад", "stock", "Пороги, пополнение, дефицит"],
+  ["Сеть аптек", "pharmacies", "Выручка и средний чек по офисинам"],
+];
+
+function appLinks() {
+  return `<h2>Приложение officine — работает на демо-базе</h2>
+  <div class="card"><p>Пять экранов поверх SQLite: справочник, касса со списанием остатка,
+  склад с пополнением и сеть аптек. Все операции пишутся в журнал, продажа проходит в транзакции.</p>
+  <div class="grid">${APP_LINKS.map(([title, slug, text]) => `<a class="card link" href="#/${slug}"><h3>${esc(title)}</h3><p>${esc(text)}</p></a>`).join("")}</div></div>`;
+}
+
 function card(project) {
   return `<a class="card link" href="#/${project.slug}">
     <span class="meta">${esc(project.code)} · ${esc(project.stack[0])}</span>
@@ -53,6 +68,6 @@ export default {
   title: "Обзор",
   async mount(root, state) {
     const catalog = state.catalog || {};
-    root.innerHTML = `${hero(catalog)}${overview(catalog)}<div class="grid">${(catalog.projects || []).map(card).join("")}</div>${footer()}`;
+    root.innerHTML = `${hero(catalog)}${appLinks()}${overview(catalog)}<div class="grid">${(catalog.projects || []).map(card).join("")}</div>${footer()}`;
   },
 };

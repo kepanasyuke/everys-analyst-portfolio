@@ -726,3 +726,105 @@ select {
     width: 130px;
   }
 }
+
+/* --- приложение officine --- */
+.nav-group {
+  margin: 18px 0 6px;
+  padding-left: 12px;
+  font-size: 11px;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.pill-ok {
+  color: var(--green-dark);
+}
+
+.pill-bad {
+  color: #b3261e;
+}
+
+.row-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.mini-input {
+  width: 84px;
+  padding: 6px 8px;
+  font-size: 13px;
+}
+
+.basket {
+  display: grid;
+  gap: 8px;
+}
+
+.basket-line {
+  display: grid;
+  grid-template-columns: 1fr 74px 96px 32px;
+  gap: 8px;
+  align-items: center;
+  font-size: 14px;
+}
+
+.receipt {
+  border-left: 3px solid var(--green);
+  background: #f6fdf1;
+  padding: 14px 16px;
+  border-radius: 0 var(--radius-card) var(--radius-card) 0;
+  font-size: 14px;
+}
+
+.picker {
+  max-height: 260px;
+  overflow-y: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+}
+
+.picker button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  background: var(--surface);
+  padding: 9px 12px;
+  font-family: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.picker button:hover {
+  background: var(--violet-soft);
+}
+
+@media (max-width: 700px) {
+  .basket-line {
+    grid-template-columns: 1fr 64px 80px 28px;
+  }
+}
+
+/* таблицы берут естественную ширину и скроллятся внутри карточки, слова не рвутся по буквам */
+.table-wrap table {
+  width: auto;
+  min-width: 100%;
+}
+
+th,
+td {
+  overflow-wrap: break-word;
+}
+
+.table-wrap td,
+.table-wrap th {
+  white-space: nowrap;
+}
+
+.table-wrap td:first-child {
+  white-space: normal;
+}

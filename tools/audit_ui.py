@@ -17,9 +17,15 @@ VIEWS = STATIC / "views"
 
 ID_USE = re.compile(r'getElementById\("([^"]+)"\)')
 ID_DEF = re.compile(r'id="([^"]+)"')
-API_USE = re.compile(r'(?:get|post|query)\(\s*[`"\'](/api/[^`"\']*)')
+API_USE = re.compile(r'(?:get|post|query|patch|remove)\(\s*[`"\'](/api/[^`"\']*)')
 IMPORT_VIEW = re.compile(r'from "\./views/([a-z0-9_]+)\.js"')
 ASSET = re.compile(r'(?:src|href)="(/static/[^"]+)"')
+TEMPLATE = re.compile(r"\$\{[^}]+\}")
+PARAM = re.compile(r"\{[^}]+\}")
+
+
+def normalized(address: str) -> str:
+    return PARAM.sub("{p}", TEMPLATE.sub("{p}", address.split("?")[0]))
 
 
 def read(path: Path) -> str:
@@ -39,11 +45,11 @@ def api_uses() -> list[tuple]:
 
 
 def api_routes() -> set[str]:
-    return set(app.openapi()["paths"])
+    return {normalized(path) for path in app.openapi()["paths"]}
 
 
 def reachable(address: str) -> bool:
-    return address in api_routes()
+    return normalized(address) in api_routes()
 
 
 def unknown_api() -> list[tuple]:

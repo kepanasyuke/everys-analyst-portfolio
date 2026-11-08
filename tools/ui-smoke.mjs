@@ -79,6 +79,7 @@ function element(id) {
 globalThis.document = {
   getElementById: (id) => element(id),
   querySelectorAll: (selector) => (selector.includes("data-gate") ? [...registry.values()].filter((item) => item.dataset.gate) : []),
+  querySelector: () => null,
 };
 globalThis.window = { scrollTo: () => {} };
 globalThis.fetch = (url, options) => realFetch(`${BASE}${url}`, options);
@@ -87,6 +88,11 @@ const settle = (ms = 1200) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const CASES = [
   { file: "home.js", label: "Обзор", marker: "Восемь рабочих инструментов", button: null },
+  { file: "dashboard.js", label: "A0 рабочее место", marker: "Выручка · 30 дней", button: "refresh" },
+  { file: "catalog.js", label: "A1 каталог", marker: "Стоимость выборки", button: "search" },
+  { file: "counter.js", label: "A2 касса", marker: "остаток", button: null },
+  { file: "stock.js", label: "A3 склад", marker: "Позиций под угрозой", button: "refresh" },
+  { file: "pharmacies.js", label: "A4 сеть", marker: "Аптек в сети", button: "refresh" },
   { file: "p01.js", label: "P01 требования", marker: "Критерии приёмки", button: "run" },
   { file: "p02.js", label: "P02 SQL Lab", marker: "Что это значит", button: "run" },
   { file: "p03.js", label: "P03 противоречия", marker: "Рекомендация.", button: "scan-all" },
@@ -97,10 +103,11 @@ const CASES = [
   { file: "p08.js", label: "P08 глоссарий", marker: "Словарь", button: "run" },
 ];
 
-const OUTPUT_BLOCKS = ["out", "results", "soap", "annotation"];
+const OUTPUT_BLOCKS = ["out", "results", "soap", "annotation", "kpi", "alerts", "top", "sales", "journal", "basket", "recent", "receipt", "picker"];
 
 function collected(root) {
-  return [root.html, ...OUTPUT_BLOCKS.map((id) => element(id).html)].join("\n");
+  const blocks = [...registry.values()].map((item) => item.html);
+  return [root.html, ...blocks, ...OUTPUT_BLOCKS.map((id) => element(id).html)].join("\n");
 }
 
 async function runCase(testCase) {

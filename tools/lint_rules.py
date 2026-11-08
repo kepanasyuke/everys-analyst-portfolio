@@ -59,7 +59,12 @@ def check_exit(func: ast.stmt, path: Path) -> list[dict]:
 
 
 def allowed_exit(func: ast.stmt, count: int) -> bool:
-    return count == 1 or (count == 0 and (func.name == "__init__" or func.name.startswith("test_")))
+    return count == 1 or (count == 0 and (func.name == "__init__" or func.name.startswith("test_") or raises_only(func)))
+
+
+def raises_only(func: ast.stmt) -> bool:
+    body_nodes = body(func)
+    return len(body_nodes) == 1 and isinstance(body_nodes[0], ast.Raise)
 
 
 def check_size(func: ast.stmt, path: Path) -> list[dict]:

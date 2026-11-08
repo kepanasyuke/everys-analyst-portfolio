@@ -125,3 +125,13 @@ export function warn(message) {
 export function scoreTone(score) {
   return score >= 85 ? "good" : score >= 60 ? "" : "bad";
 }
+
+export const eur = (value) => `${Number(value || 0).toLocaleString("ru-RU", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €`;
+
+export const qty = (value) => Number(value || 0).toLocaleString("ru-RU");
+
+export function statusTag(status) {
+  const map = { ok: ["в наличии", "green"], alerte: ["порог", "amber"], rupture: ["дефицит", "red"], validee: ["проведена", "green"], annulee: ["отменена", "red"] };
+  const [label, tone] = map[status] || [status, "grey"];
+  return tag(label, tone);
+}
