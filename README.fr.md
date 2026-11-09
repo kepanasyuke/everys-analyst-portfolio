@@ -12,6 +12,8 @@ Everys (France) · WinPharma · édition de logiciels pour pharmacies depuis 199
 plus de 7000 officines · 3 centres de développement : Moscou, Bretagne, Silicon Valley
 ```
 
+![Everys · WinPharma · portfolio analyste 2026](assets/officine-banner.png)
+
 ---
 
 ## Démarrage rapide
@@ -88,6 +90,8 @@ signale les lacunes du dictionnaire.
 ---
 
 ## Application officine — poste de travail de la pharmacie
+
+![Carte de l'application officine sur la page d'accueil](assets/product-card.png)
 
 Le portfolio est devenu une application qui fonctionne : même base `data/officine.db`, mais en
 écriture. Cinq écrans dans la barre latérale, groupe « Application officine ».
