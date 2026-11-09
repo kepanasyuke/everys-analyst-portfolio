@@ -54,6 +54,9 @@ l'interface n'a pas d'étape de build.
 | P07 | Release Gate | Version livrée sans plan de retour arrière | Score pondéré des portes, blocages, procès-verbal RU/FR | `POST /api/p07/assess` |
 | P08 | Glossaire FR↔RU | L'équipe de Moscou lit les spécifications françaises | Recherche bilingue sur 30 termes, couverture du corpus, lacunes terminologiques | `GET /api/p08/search` |
 
+Sur la page d'accueil, une neuvième carte **A00 « Application officine »** (avec visuel et lien vers
+le poste de travail) rejoint ces huit projets.
+
 ### Ce que montre chaque outil
 
 **P01.** « En tant que pharmacien je veux délivrer une ordonnance partiellement… » devient un jeu de

@@ -242,6 +242,34 @@ p {
   color: var(--muted);
 }
 
+.app-card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 0;
+}
+
+.app-card .card-cover {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  background: var(--violet-soft);
+  transition: transform var(--ease);
+}
+
+.app-card:hover .card-cover {
+  transform: scale(1.03);
+}
+
+.app-card .card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 20px 22px 22px;
+}
+
 .btn {
   display: inline-flex;
   align-items: center;

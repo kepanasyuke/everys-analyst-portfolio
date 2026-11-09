@@ -99,6 +99,20 @@ function card(project) {
   </a>`;
 }
 
+function appCard() {
+  return `<a class="card link app-card" href="#/app">
+    <img class="card-cover" src="/static/media/officine-pharmacie.jpg" alt="" aria-hidden="true" loading="lazy" />
+    <div class="card-body">
+      <span class="meta">A00 · FastAPI · SQLite</span>
+      <h3>Приложение officine</h3>
+      <p>Рабочее место аптеки: касса со списанием остатка, склад, возвраты, пополнение по порогам, архив и сеть из 12 офисин.</p>
+      <p class="muted"><strong>AI:</strong> не нужен — инварианты держит бэкенд, а не модель</p>
+      <div class="btn-row">${["FastAPI", "SQLite", "ES-модули"].map((item) => tag(item, "grey")).join("")}</div>
+      <span class="muted">7 экранов · 1400 продаж в демо-базе</span>
+    </div>
+  </a>`;
+}
+
 function hero(catalog) {
   return `<section class="hero">
     <span class="kicker">Everys · WinPharma · системный и продуктовый аналитик</span>
@@ -141,6 +155,6 @@ export default {
   title: "Обзор",
   async mount(root, state) {
     const catalog = state.catalog || {};
-    root.innerHTML = `${hero(catalog)}${appLinks()}${gallery()}${overview(catalog)}<div class="grid">${(catalog.projects || []).map(card).join("")}</div>${footer()}`;
+    root.innerHTML = `${hero(catalog)}${appLinks()}${gallery()}${overview(catalog)}<div class="grid">${appCard()}${(catalog.projects || []).map(card).join("")}</div>${footer()}`;
   },
 };
