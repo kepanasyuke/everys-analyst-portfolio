@@ -27,8 +27,27 @@ const KPIS = [
   ["Тестов и E2E-проверок", "167"],
 ];
 
+const GALLERY = [
+  ["officine-pharmacie.jpg", "Офисина", "Домен собран по реальной аптечной логике: продажи, остатки, пороги, роли."],
+  ["officine-accueil.jpg", "Стойка и касса", "Скидку ограничивает роль: до 30 % у фармацевта, до 100 % у титуляра."],
+  ["officine-stock.jpg", "Склад и пороги", "Позиции ниже порога попадают в предложение по пополнению."],
+  ["officine-pilotage.jpg", "Показатели сети", "Выручка за 30 дней, средний чек и топ препаратов по 12 офисинам."],
+];
+
 function feature(item) {
   return `<li>${icon(item[0], 15)}<span>${esc(item[1])}</span></li>`;
+}
+
+function shot([src, title, text]) {
+  return `<figure class="shot">
+    <img src="/static/media/${src}" alt="${esc(title)}" loading="lazy" width="1024" height="1024" />
+    <figcaption><strong>${esc(title)}</strong><span>${esc(text)}</span></figcaption>
+  </figure>`;
+}
+
+function gallery() {
+  return `<h2>Аптека в разрезе</h2>
+  <div class="shots">${GALLERY.map(shot).join("")}</div>`;
 }
 
 function screenLink([title, slug, text, name]) {
@@ -122,6 +141,6 @@ export default {
   title: "Обзор",
   async mount(root, state) {
     const catalog = state.catalog || {};
-    root.innerHTML = `${hero(catalog)}${appLinks()}${overview(catalog)}<div class="grid">${(catalog.projects || []).map(card).join("")}</div>${footer()}`;
+    root.innerHTML = `${hero(catalog)}${appLinks()}${gallery()}${overview(catalog)}<div class="grid">${(catalog.projects || []).map(card).join("")}</div>${footer()}`;
   },
 };

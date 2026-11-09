@@ -96,6 +96,10 @@ signale les lacunes du dictionnaire.
 Le portfolio est devenu une application qui fonctionne : même base `data/officine.db`, mais en
 écriture. Cinq écrans dans la barre latérale, groupe « Application officine ».
 
+| L'officine | Pilotage du réseau |
+|------------|--------------------|
+| ![Intérieur de l'officine](app/static/media/officine-pharmacie.jpg) | ![Pilotage du réseau](app/static/media/officine-pilotage.jpg) |
+
 | Écran | Rôle | Endpoints |
 |-------|------|-----------|
 | Poste de travail (`#/app`) | CA sur 30 jours, ruptures, top produits, dernières ventes, journal | `GET /api/app/overview` |
@@ -142,6 +146,8 @@ Enregistrés avec Playwright sur l'application réelle (`127.0.0.1:8077`), pas d
 
 ![Réassort par seuil](assets/demo-reorder.gif)
 
+![Comptoir et caisse](app/static/media/officine-accueil.jpg)
+
 Les captures de frames sont prises par `tools/record-demos.mjs` (Playwright + Edge), les GIF sont
 assemblés par `tools/build-gifs.py` (Pillow, 900 px, 180 ms par image).
 
@@ -186,6 +192,8 @@ la répartition par catégorie et la rupture totale. Les quantités se corrigent
 s'applique en une transaction : les stocks montent, le journal enregistre `stock.reorder` avec le numéro de
 lot, le nombre de positions et d'unités. Le journal se filtre par action —
 `GET /api/app/journal?action=stock.reorder`.
+
+![Stock et seuils](app/static/media/officine-stock.jpg)
 
 ---
 
