@@ -1,4 +1,4 @@
-const PATHS = {
+﻿const PATHS = {
   home: '<path d="M4 11 12 4l8 7"/><path d="M6 10v10h12V10"/>',
   grid: '<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',
   box: '<path d="M21 8.5 12 3 3 8.5v7L12 21l9-5.5z"/><path d="M3 8.5 12 14l9-5.5"/><path d="M12 14v7"/>',
@@ -31,7 +31,7 @@ export function icon(name, size = 16) {
 }
 
 export function iconLabel(name, text, size = 16) {
-  return `${icon(name, size)}<span>${text}</span>`;
+  return `<span class="icon-tile">${icon(name, size)}</span><span>${text}</span>`;
 }
 
 export function iconOnly(name, label, size = 16) {

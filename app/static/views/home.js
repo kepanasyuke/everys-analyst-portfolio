@@ -28,10 +28,10 @@ const KPIS = [
 ];
 
 const GALLERY = [
-  ["officine-pharmacie.jpg", "Офисина", "Домен собран по реальной аптечной логике: продажи, остатки, пороги, роли."],
-  ["officine-accueil.jpg", "Стойка и касса", "Скидку ограничивает роль: до 30 % у фармацевта, до 100 % у титуляра."],
-  ["officine-stock.jpg", "Склад и пороги", "Позиции ниже порога попадают в предложение по пополнению."],
-  ["officine-pilotage.jpg", "Показатели сети", "Выручка за 30 дней, средний чек и топ препаратов по 12 офисинам."],
+  ["officine-pharmacie.svg", "Офисина", "Домен собран по реальной аптечной логике: продажи, остатки, пороги, роли."],
+  ["officine-accueil.svg", "Стойка и касса", "Скидку ограничивает роль: до 30 % у фармацевта, до 100 % у титуляра."],
+  ["officine-stock.svg", "Склад и пороги", "Позиции ниже порога попадают в предложение по пополнению."],
+  ["officine-pilotage.svg", "Показатели сети", "Выручка за 30 дней, средний чек и топ препаратов по 12 офисинам."],
 ];
 
 function feature(item) {
@@ -40,7 +40,7 @@ function feature(item) {
 
 function shot([src, title, text]) {
   return `<figure class="shot">
-    <img src="/static/media/${src}" alt="${esc(title)}" loading="lazy" width="1024" height="1024" />
+    <img src="/static/media/${src}" alt="${esc(title)}" loading="lazy" width="1200" height="900" />
     <figcaption><strong>${esc(title)}</strong><span>${esc(text)}</span></figcaption>
   </figure>`;
 }
@@ -101,7 +101,7 @@ function card(project) {
 
 function appCard() {
   return `<a class="card link app-card" href="#/app">
-    <img class="card-cover" src="/static/media/officine-pharmacie.jpg" alt="" aria-hidden="true" loading="lazy" />
+    <img class="card-cover" src="/static/media/officine-pharmacie.svg" alt="" aria-hidden="true" loading="lazy" />
     <div class="card-body">
       <span class="meta">A00 · FastAPI · SQLite</span>
       <h3>Приложение officine</h3>

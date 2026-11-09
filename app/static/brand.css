@@ -1,4 +1,4 @@
-:root {
+﻿:root {
   --violet: #9e12c9;
   --violet-dark: #7a0e9b;
   --violet-soft: #f4e6f9;
@@ -253,7 +253,7 @@ p {
   display: block;
   width: 100%;
   height: auto;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 4 / 3;
   object-fit: cover;
   background: var(--violet-soft);
   transition: transform var(--ease);
@@ -296,6 +296,41 @@ p {
 .btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+.btn .icon-tile {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 9px;
+  background: var(--surface);
+  color: var(--violet);
+  transition: background-color var(--ease), color var(--ease);
+}
+
+.btn.ghost .icon-tile {
+  background: var(--violet-soft);
+}
+
+.btn.ghost:hover .icon-tile {
+  background: var(--violet);
+  color: var(--surface);
+}
+
+.btn.green .icon-tile {
+  color: var(--green-dark);
+}
+
+.btn.small .icon-tile {
+  width: 22px;
+  height: 22px;
+  border-radius: 7px;
+}
+
+.btn:has(.icon-tile) {
+  padding-left: 8px;
 }
 
 .btn.ghost {
@@ -615,7 +650,7 @@ footer.foot {
   color: var(--muted);
 }
 
-/* --- компоненты интерфейса портфолио --- */
+/* --- РєРѕРјРїРѕРЅРµРЅС‚С‹ РёРЅС‚РµСЂС„РµР№СЃР° РїРѕСЂС‚С„РѕР»РёРѕ --- */
 .btn.small {
   padding: 6px 12px;
   font-size: 12px;
@@ -653,7 +688,7 @@ h2 {
   opacity: 1;
 }
 
-/* --- устойчивость вёрстки: сжатые сетки, широкие таблицы, селекты --- */
+/* --- СѓСЃС‚РѕР№С‡РёРІРѕСЃС‚СЊ РІС‘СЂСЃС‚РєРё: СЃР¶Р°С‚С‹Рµ СЃРµС‚РєРё, С€РёСЂРѕРєРёРµ С‚Р°Р±Р»РёС†С‹, СЃРµР»РµРєС‚С‹ --- */
 .layout,
 .layout > *,
 .main,
@@ -759,7 +794,7 @@ select {
   }
 }
 
-/* --- приложение officine --- */
+/* --- РїСЂРёР»РѕР¶РµРЅРёРµ officine --- */
 .nav-group {
   margin: 18px 0 6px;
   padding-left: 12px;
@@ -841,7 +876,7 @@ select {
   }
 }
 
-/* таблицы берут естественную ширину и скроллятся внутри карточки, слова не рвутся по буквам */
+/* С‚Р°Р±Р»РёС†С‹ Р±РµСЂСѓС‚ РµСЃС‚РµСЃС‚РІРµРЅРЅСѓСЋ С€РёСЂРёРЅСѓ Рё СЃРєСЂРѕР»Р»СЏС‚СЃСЏ РІРЅСѓС‚СЂРё РєР°СЂС‚РѕС‡РєРё, СЃР»РѕРІР° РЅРµ СЂРІСѓС‚СЃСЏ РїРѕ Р±СѓРєРІР°Рј */
 .table-wrap table {
   width: auto;
   min-width: 100%;
@@ -861,7 +896,7 @@ td {
   white-space: normal;
 }
 
-/* --- иконки и доступность --- */
+/* --- РёРєРѕРЅРєРё Рё РґРѕСЃС‚СѓРїРЅРѕСЃС‚СЊ --- */
 .icon {
   display: inline-block;
   vertical-align: -0.18em;
@@ -926,7 +961,7 @@ a.btn {
   text-decoration: none;
 }
 
-/* --- продуктовая карточка приложения officine --- */
+/* --- РїСЂРѕРґСѓРєС‚РѕРІР°СЏ РєР°СЂС‚РѕС‡РєР° РїСЂРёР»РѕР¶РµРЅРёСЏ officine --- */
 .product {
   display: grid;
   grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
@@ -1071,7 +1106,7 @@ a.btn {
   display: block;
   width: 100%;
   height: auto;
-  aspect-ratio: 1 / 1;
+  aspect-ratio: 4 / 3;
   object-fit: cover;
   background: var(--violet-soft);
 }

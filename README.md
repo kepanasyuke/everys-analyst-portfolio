@@ -105,7 +105,7 @@ SLA `blocked`. Живой режим ходит в сеть, но блокиру
 
 | Офисина | Показатели сети |
 |---------|-----------------|
-| ![Интерьер аптеки](app/static/media/officine-pharmacie.jpg) | ![Показатели сети](app/static/media/officine-pilotage.jpg) |
+| ![Интерьер аптеки](app/static/media/officine-pharmacie.svg) | ![Показатели сети](app/static/media/officine-pilotage.svg) |
 
 | Экран | Что делает | Эндпоинты |
 |-------|------------|-----------|
@@ -153,7 +153,7 @@ SLA `blocked`. Живой режим ходит в сеть, но блокиру
 
 ![Пополнение по порогам](assets/demo-reorder.gif)
 
-![Стойка и касса](app/static/media/officine-accueil.jpg)
+![Стойка и касса](app/static/media/officine-accueil.svg)
 
 Кадры снимает `tools/record-demos.mjs` (Playwright + Edge), GIF собирает `tools/build-gifs.py`
 (Pillow, 900 px, 180 мс на кадр).
@@ -200,7 +200,7 @@ SLA `blocked`. Живой режим ходит в сеть, но блокиру
 одной транзакцией: остатки растут, в журнале появляется `stock.reorder` с номером партии, числом позиций
 и штук. Журнал фильтруется по действию — `GET /api/app/journal?action=stock.reorder`.
 
-![Склад и пороги](app/static/media/officine-stock.jpg)
+![Склад и пороги](app/static/media/officine-stock.svg)
 
 ---
 

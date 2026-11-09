@@ -101,7 +101,7 @@ Le portfolio est devenu une application qui fonctionne : même base `data/offici
 
 | L'officine | Pilotage du réseau |
 |------------|--------------------|
-| ![Intérieur de l'officine](app/static/media/officine-pharmacie.jpg) | ![Pilotage du réseau](app/static/media/officine-pilotage.jpg) |
+| ![Intérieur de l'officine](app/static/media/officine-pharmacie.svg) | ![Pilotage du réseau](app/static/media/officine-pilotage.svg) |
 
 | Écran | Rôle | Endpoints |
 |-------|------|-----------|
@@ -149,7 +149,7 @@ Enregistrés avec Playwright sur l'application réelle (`127.0.0.1:8077`), pas d
 
 ![Réassort par seuil](assets/demo-reorder.gif)
 
-![Comptoir et caisse](app/static/media/officine-accueil.jpg)
+![Comptoir et caisse](app/static/media/officine-accueil.svg)
 
 Les captures de frames sont prises par `tools/record-demos.mjs` (Playwright + Edge), les GIF sont
 assemblés par `tools/build-gifs.py` (Pillow, 900 px, 180 ms par image).
@@ -196,7 +196,7 @@ s'applique en une transaction : les stocks montent, le journal enregistre `stock
 lot, le nombre de positions et d'unités. Le journal se filtre par action —
 `GET /api/app/journal?action=stock.reorder`.
 
-![Stock et seuils](app/static/media/officine-stock.jpg)
+![Stock et seuils](app/static/media/officine-stock.svg)
 
 ---
 
