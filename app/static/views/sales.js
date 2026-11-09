@@ -1,4 +1,5 @@
 import { get, post } from "../api.js";
+import { icon, iconLabel } from "../icons.js";
 import { eur, errorBox, esc, pageHead, qty, stats, statusTag, table, tag, withSpinner } from "../ui.js";
 
 const PAGE = 10;
@@ -10,7 +11,7 @@ function rowOf(item) {
     `${esc(item.officine)}<br><span class="muted">${esc(item.ville)} · ${esc(item.canal)}</span>`,
     eur(item.montant_ttc),
     statusTag(item.statut),
-    `<span class="row-actions"><a class="btn ghost small" href="/api/app/sales/${esc(item.id)}/receipt" target="_blank" rel="noopener">Чек</a>${item.statut === "validee" ? `<button class="btn ghost small" data-return="${esc(item.id)}">Вернуть</button>` : ""}</span>`,
+    `<span class="row-actions"><a class="btn ghost small" href="/api/app/sales/${esc(item.id)}/receipt" target="_blank" rel="noopener">${iconLabel("receipt", "Чек", 14)}</a>${item.statut === "validee" ? `<button class="btn ghost small" data-return="${esc(item.id)}">${iconLabel("undo", "Вернуть", 14)}</button>` : ""}</span>`,
   ];
 }
 
@@ -34,7 +35,7 @@ function returnPanel(sale) {
     <div class="btn-row">${tag(`продажа №${sale.id}`, "grey")}${statusTag(sale.statut)}<a href="/api/app/sales/${sale.id}/receipt" target="_blank" rel="noopener" class="btn ghost small">Чек</a></div>
     <h3>Возврат по продаже</h3>
     <div class="basket">${linesForm(sale)}</div>
-    <div class="btn-row"><button class="btn" id="do-return">Оформить возврат</button><button class="btn ghost" id="cancel-return">Отмена</button></div>
+    <div class="btn-row"><button class="btn" id="do-return">${iconLabel("undo", "Оформить возврат")}</button><button class="btn ghost" id="cancel-return">Отмена</button></div>
     <p class="muted">Вернуть можно не больше проданного и не больше остатка возврата: количество ограничено в полях.</p>
   </div>`;
 }
@@ -55,8 +56,8 @@ export default {
           <label>Статус<select id="statut"><option value="">все</option><option value="validee">проведена</option><option value="annulee">отменена</option></select></label>
         </div>
         <div class="btn-row">
-          <button class="btn" id="apply">Показать</button>
-          <a class="btn ghost" id="export" href="/api/app/export/sales.csv" download>Выгрузить CSV</a>
+          <button class="btn" id="apply">${iconLabel("search", "Показать")}</button>
+          <a class="btn ghost" id="export" href="/api/app/export/sales.csv" download>${iconLabel("download", "Выгрузить CSV")}</a>
         </div>
       </div>
       <div id="totals"></div>
@@ -80,8 +81,8 @@ export default {
       state.items = result.value.items;
       const total = result.value.total;
       document.getElementById("totals").innerHTML = stats([["Продаж по фильтру", qty(total)], ["На странице", qty(state.items.length)], ["Сумма страницы", eur(state.items.reduce((sum, item) => sum + item.montant_ttc, 0))]]);
-      document.getElementById("table").innerHTML = state.items.length ? table(["№", "Дата", "Аптека", "Сумма", "Статус", "Действия"], state.items.map(rowOf)) : `<p class="muted">Ничего не найдено.</p>`;
-      document.getElementById("pager").innerHTML = `<button class="btn ghost small" id="prev" ${state.offset ? "" : "disabled"}>← Назад</button><span class="muted">${state.offset + 1}–${state.offset + state.items.length} из ${qty(total)}</span><button class="btn ghost small" id="next" ${state.offset + PAGE < total ? "" : "disabled"}>Вперёд →</button>`;
+      document.getElementById("table").innerHTML = state.items.length ? table(["№", "Дата", "Аптека", "Сумма", "Статус", "Действия"], state.items.map(rowOf)) : `<div class="empty">${icon("archive", 18)}<span>По этому фильтру продаж нет</span></div>`;
+      document.getElementById("pager").innerHTML = `<button class="btn ghost small" id="prev" ${state.offset ? "" : "disabled"}>${iconLabel("chevron-left", "Назад", 14)}</button><span class="muted">${state.offset + 1}–${state.offset + state.items.length} из ${qty(total)}</span><button class="btn ghost small" id="next" ${state.offset + PAGE < total ? "" : "disabled"}>${iconLabel("chevron-right", "Вперёд", 14)}</button>`;
       document.getElementById("export").href = `/api/app/export/sales.csv?${params()}`;
     };
     const openReturn = async (saleId) => {
@@ -93,6 +94,13 @@ export default {
     document.getElementById("apply").addEventListener("click", (event) => {
       state.offset = 0;
       load(event.currentTarget);
+    });
+    ["from", "to"].forEach((id) => {
+      document.getElementById(id).addEventListener("keydown", (event) => {
+        if (event.key !== "Enter") return;
+        state.offset = 0;
+        load(document.getElementById("apply"));
+      });
     });
     document.getElementById("pager").addEventListener("click", (event) => {
       const target = event.target.closest("#prev, #next");

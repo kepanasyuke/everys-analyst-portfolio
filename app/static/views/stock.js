@@ -1,4 +1,5 @@
 import { get, post } from "../api.js";
+import { icon, iconLabel } from "../icons.js";
 import { eur, errorBox, esc, pageHead, qty, statusTag, stats, table, withSpinner } from "../ui.js";
 
 function rowsOf(items) {
@@ -7,7 +8,7 @@ function rowsOf(items) {
     qty(item.stock_actuel),
     qty(item.seuil),
     statusTag(item.statut_stock),
-    `<span class="row-actions"><input class="mini-input" type="number" min="1" value="${Math.max(10, item.seuil * 2 - item.stock_actuel)}" data-qty="${esc(item.cip)}" /><button class="btn ghost small" data-restock="${esc(item.cip)}">Пополнить</button></span>`,
+    `<span class="row-actions"><input class="mini-input" type="number" min="1" value="${Math.max(10, item.seuil * 2 - item.stock_actuel)}" data-qty="${esc(item.cip)}" /><button class="btn ghost small" data-restock="${esc(item.cip)}">${iconLabel("plus", "Пополнить", 14)}</button></span>`,
   ]);
 }
 
@@ -20,7 +21,7 @@ function block(data) {
     ["Стоимость склада", eur(data.kpi.valeur_stock)],
     ["Позиций в дефиците по сети", qty(data.kpi.ruptures)],
   ])}
-  ${alerts.length ? table(["Товар", "Остаток", "Порог", "Статус", "Пополнение"], rowsOf(alerts)) : `<p class="muted">Все позиции выше порога пополнения.</p>`}
+  ${alerts.length ? table(["Товар", "Остаток", "Порог", "Статус", "Пополнение"], rowsOf(alerts)) : `<div class="empty">${icon("check", 18)}<span>Все позиции выше порога пополнения.</span></div>`}
   <p class="muted">Пополнение увеличивает остаток и пишется в журнал как действие «stock.restock».</p>`;
 }
 
@@ -32,7 +33,7 @@ export default {
   async mount(root) {
     root.innerHTML = `${pageHead("Приложение officine · склад", "Дефицит, пороги и пополнение",
       "Позиции, у которых остаток меньше или равен порогу. Пополнение проводится в транзакции: остаток растёт, журнал фиксирует количество и автора.")}
-      <div class="btn-row"><button class="btn" id="refresh">Обновить</button></div>
+      <div class="btn-row"><button class="btn" id="refresh">${iconLabel("refresh", "Обновить")}</button></div>
       <div id="out"></div>`;
 
     const load = async (button) => {

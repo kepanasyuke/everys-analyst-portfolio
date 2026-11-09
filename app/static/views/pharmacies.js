@@ -1,4 +1,5 @@
 import { get } from "../api.js";
+import { iconLabel } from "../icons.js";
 import { eur, errorBox, esc, pageHead, qty, stats, table, withSpinner } from "../ui.js";
 
 function rowsOf(items) {
@@ -26,7 +27,7 @@ export default {
   async mount(root) {
     root.innerHTML = `${pageHead("Приложение officine · сеть", "Двенадцать аптек: выручка и средний чек",
       "Срез по офисинам сети: объём продаж, выручка и средний чек. Продажи, проведённые в кассе, сразу попадают в эту таблицу.")}
-      <div class="btn-row"><button class="btn" id="refresh">Обновить</button></div>
+      <div class="btn-row"><button class="btn" id="refresh">${iconLabel("refresh", "Обновить")}</button></div>
       <div id="out"></div>`;
     const load = async (button) => {
       const result = await withSpinner(button, () => get("/api/app/pharmacies"));

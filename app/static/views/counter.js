@@ -1,4 +1,5 @@
 import { get, post } from "../api.js";
+import { icon, iconLabel } from "../icons.js";
 import { eur, errorBox, esc, pageHead, qty, stats, table, withSpinner } from "../ui.js";
 
 function pickerList(items) {
@@ -6,21 +7,21 @@ function pickerList(items) {
 }
 
 function basketBlock(basket) {
-  if (!basket.length) return `<p class="muted">Корзина пуста: найдите товар и добавьте его.</p>`;
+  if (!basket.length) return `<div class="empty">${icon("cart", 18)}<span>Корзина пуста: найдите товар и добавьте его.</span></div>`;
   return `<div class="basket">${basket
     .map((line) => `<div class="basket-line">
       <span>${esc(line.nom)}</span>
       <input class="mini-input" type="number" min="1" max="${line.stock}" value="${line.quantite}" data-qty="${esc(line.cip)}" />
       <span>${eur(line.prix * line.quantite)}</span>
-      <button class="btn ghost small" data-del="${esc(line.cip)}">×</button>
+      <button class="btn ghost small" data-del="${esc(line.cip)}" aria-label="Удалить позицию" title="Удалить позицию">${icon("close", 14)}</button>
     </div>`)
     .join("")}</div>`;
 }
 
 function actionCell(item) {
-  const receipt = `<a class="btn ghost small" href="/api/app/sales/${esc(item.id)}/receipt" target="_blank" rel="noopener">Чек</a>`;
-  const cancel = item.statut === "validee" ? `<button class="btn ghost small" data-cancel="${esc(item.id)}">Отменить</button>` : "";
-  return `<span class="row-actions">${receipt}${cancel}<a class="btn ghost small" href="#/sales">Возврат</a></span>`;
+  const receipt = `<a class="btn ghost small" href="/api/app/sales/${esc(item.id)}/receipt" target="_blank" rel="noopener">${iconLabel("receipt", "Чек", 14)}</a>`;
+  const cancel = item.statut === "validee" ? `<button class="btn ghost small" data-cancel="${esc(item.id)}">${iconLabel("close", "Отменить", 14)}</button>` : "";
+  return `<span class="row-actions">${receipt}${cancel}<a class="btn ghost small" href="#/sales">${iconLabel("undo", "Возврат", 14)}</a></span>`;
 }
 
 function saleRow(item) {
@@ -63,7 +64,7 @@ export default {
           <div class="card">
             <h3>Корзина</h3>
             <div id="basket"></div>
-            <div class="btn-row"><strong id="total">0,00 €</strong><button class="btn" id="submit">Провести продажу</button></div>
+            <div class="btn-row"><strong id="total">0,00 €</strong><button class="btn" id="submit">${iconLabel("check", "Провести продажу")}</button></div>
           </div>
           <div id="receipt"></div>
           <div class="card">
@@ -83,7 +84,7 @@ export default {
     };
     const paintPicker = (term = "") => {
       const found = state.catalog.filter((item) => `${item.nom} ${item.cip} ${item.dci}`.toLowerCase().includes(term.toLowerCase())).slice(0, 40);
-      document.getElementById("picker").innerHTML = pickerList(found) || `<p class="muted">Ничего не найдено</p>`;
+      document.getElementById("picker").innerHTML = pickerList(found) || `<div class="empty">${icon("search", 18)}<span>Ничего не найдено по этому запросу</span></div>`;
     };
     const loadSales = async () => {
       const result = await get("/api/app/sales?limit=8");

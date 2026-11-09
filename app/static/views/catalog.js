@@ -1,4 +1,5 @@
 import { get, patch, post, remove } from "../api.js";
+import { icon, iconLabel } from "../icons.js";
 import { eur, errorBox, esc, md, note, pageHead, qty, statusTag, stats, table, tag, withSpinner } from "../ui.js";
 
 function rowsOf(items) {
@@ -9,7 +10,7 @@ function rowsOf(items) {
     qty(item.stock_actuel),
     qty(item.seuil),
     `${statusTag(item.statut_stock)} ${tag(`${item.taux_remboursement} %`, "grey")}`,
-    `<span class="row-actions"><button class="btn ghost small" data-edit="${esc(item.cip)}">Править</button><button class="btn ghost small" data-history="${esc(item.cip)}">История</button></span>`,
+    `<span class="row-actions"><button class="btn ghost small" data-edit="${esc(item.cip)}">${iconLabel("edit", "Править", 14)}</button><button class="btn ghost small" data-history="${esc(item.cip)}">${iconLabel("history", "История", 14)}</button></span>`,
   ]);
 }
 
@@ -29,10 +30,10 @@ function editForm(item) {
       <label>Ставка возмещения, %<input type="number" id="edit-taux" step="1" min="0" max="100" value="${item.taux_remboursement}" /></label>
     </div>
     <div class="btn-row">
-      <button class="btn" id="save">Сохранить</button>
+      <button class="btn" id="save">${iconLabel("check", "Сохранить")}</button>
       <input class="mini-input" type="number" id="restock-qty" min="1" value="20" />
-      <button class="btn ghost" id="restock">Пополнить</button>
-      <button class="btn ghost" id="remove">Удалить</button>
+      <button class="btn ghost" id="restock">${iconLabel("plus", "Пополнить")}</button>
+      <button class="btn ghost" id="remove">${iconLabel("trash", "Удалить")}</button>
     </div>
     <p class="muted">Удаление разрешено только для товара без продаж. Все действия попадают в журнал.</p>
   </div>`;
@@ -50,7 +51,7 @@ function createForm(categories) {
       <label>Порог<input type="number" id="new-seuil" step="1" min="0" value="5" /></label>
       <label>Ставка возмещения, %<input type="number" id="new-taux" step="1" min="0" max="100" value="65" /></label>
     </div>
-    <div class="btn-row"><button class="btn" id="create">Добавить в справочник</button></div>
+    <div class="btn-row"><button class="btn" id="create">${iconLabel("plus", "Добавить в справочник")}</button></div>
   </details>`;
 }
 
@@ -81,8 +82,8 @@ export default {
         <div class="btn-row">
           <input type="text" id="q" placeholder="Название, DCI или CIP13" value="" style="max-width:280px" />
           <select id="cat"><option value="">Все категории</option></select>
-          <button class="btn" id="search">Найти</button>
-          <a class="btn ghost" href="/api/app/export/products.csv" download>Выгрузить CSV</a>
+          <button class="btn" id="search">${iconLabel("search", "Найти")}</button>
+          <a class="btn ghost" href="/api/app/export/products.csv" download>${iconLabel("download", "Выгрузить CSV")}</a>
         </div>
       </div>
       <div id="table"></div>
@@ -120,6 +121,9 @@ export default {
       }
     });
     document.getElementById("search").addEventListener("click", (event) => load(event.currentTarget));
+    document.getElementById("q").addEventListener("keydown", (event) => {
+      if (event.key === "Enter") load(document.getElementById("search"));
+    });
     document.getElementById("editor").addEventListener("click", async (event) => {
       if (event.target.id === "save") {
         const body = { prix_public: Number(document.getElementById("edit-prix").value), stock_actuel: Number(document.getElementById("edit-stock").value), seuil: Number(document.getElementById("edit-seuil").value), taux_remboursement: Number(document.getElementById("edit-taux").value) };

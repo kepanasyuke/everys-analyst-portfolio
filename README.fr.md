@@ -139,6 +139,20 @@ Les données sont modifiables : `python tools/seed.py` restaure l'état initial 
 
 ---
 
+### Icônes et ergonomie
+
+- Jeu SVG maison `app/static/icons.js` : 24 icônes, `stroke="currentColor"`, tailles 14–18 px, sans
+  police externe ni CDN. Elles habillent la navigation et les actions (actualiser, rechercher,
+  exporter, enregistrer, historique, réassort, retour, ticket, précédent/suivant).
+- Accessibilité : `focus-visible` avec contour de marque, `aria-label` sur les boutons icône seule
+  (`×` du panier), icônes décoratives en `aria-hidden`, textes lecteur d'écran via `.sr-only`.
+- États vides illustrés : panier vide, aucun article trouvé, aucune vente pour le filtre, aucun
+  article sous le seuil.
+- Clavier : `Entrée` dans la recherche du catalogue, `Entrée` sur les dates de l'archive.
+- `tools/audit_ui.py` vérifie que chaque icône utilisée existe dans le jeu.
+
+---
+
 ## Lien avec l'offre
 
 | Attendu chez Everys | Où c'est traité |

@@ -1,4 +1,5 @@
 import { get } from "./api.js";
+import { icon } from "./icons.js";
 import { esc } from "./ui.js";
 import home from "./views/home.js";
 import dashboard from "./views/dashboard.js";
@@ -27,8 +28,11 @@ const nav = document.getElementById("nav");
 const root = document.getElementById("view");
 const state = { catalog: { projects: [], corpus: {}, ai: {} } };
 
+const NAV_ICONS = { home: "home", app: "grid", catalog: "box", counter: "cart", stock: "layers", sales: "archive", pharmacies: "pharmacy" };
+
 function link(view) {
-  return `<a href="#/${view.slug}" data-slug="${view.slug}"><span class="idx">${esc(view.code || "")}</span><span>${esc(view.title)}</span></a>`;
+  const name = NAV_ICONS[view.slug] || "sparkles";
+  return `<a href="#/${view.slug}" data-slug="${view.slug}">${icon(name, 16)}<span class="idx">${esc(view.code || "")}</span><span>${esc(view.title)}</span></a>`;
 }
 
 function renderNav() {

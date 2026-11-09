@@ -22,6 +22,8 @@ IMPORT_VIEW = re.compile(r'from "\./views/([a-z0-9_]+)\.js"')
 ASSET = re.compile(r'(?:src|href)="(/static/[^"]+)"')
 TEMPLATE = re.compile(r"\$\{[^}]+\}")
 PARAM = re.compile(r"\{[^}]+\}")
+ICON_USE = re.compile(r'icon(?:Label)?\(\s*"([a-z-]+)"')
+ICON_DEF = re.compile(r'^\s{2}"?([a-z-]+)"?:\s', re.M)
 
 
 def normalized(address: str) -> str:
@@ -69,6 +71,19 @@ def missing_assets() -> list[str]:
     return [asset for asset in ASSET.findall(read(STATIC / "index.html")) if not (STATIC / asset.removeprefix("/static/")).exists()]
 
 
+def icon_names() -> set[str]:
+    return set(ICON_DEF.findall(read(STATIC / "icons.js")))
+
+
+def icon_sources() -> list[Path]:
+    return [STATIC / "app.js", *view_files()]
+
+
+def unknown_icons() -> list[tuple]:
+    known = icon_names()
+    return [(path.name, name) for path in icon_sources() for name in ICON_USE.findall(read(path)) if name not in known]
+
+
 def report(rows: list[str]) -> int:
     print("\n".join(rows + (["Аудит интерфейса: расхождений нет"] if not rows else [])))
     return 1 if rows else 0
@@ -78,6 +93,7 @@ def issues() -> list[str]:
     checks = [
         "висячие getElementById: " + str(orphan_ids()),
         "неизвестные адреса: " + str(unknown_api()),
+        "неизвестные иконки: " + str(unknown_icons()),
         "вью без импорта: " + str(unregistered_views()),
         "импорт без файла: " + str(missing_views()),
         "нет статики: " + str(missing_assets()),

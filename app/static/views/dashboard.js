@@ -1,4 +1,5 @@
 import { get } from "../api.js";
+import { iconLabel } from "../icons.js";
 import { eur, errorBox, esc, num, pageHead, qty, statusTag, stats, table, tag, withSpinner } from "../ui.js";
 
 function kpiBlock(kpi) {
@@ -46,7 +47,7 @@ export default {
   async mount(root) {
     root.innerHTML = `${pageHead("Приложение officine · дашборд", "Рабочее место аптеки: продажи, остатки, журнал",
       "Живые данные из SQLite: каждая продажа, пополнение и отмена пишутся в журнал и меняют остаток. Ниже — что происходит в сети за последние 30 дней данных.")}
-      <div class="btn-row"><select id="days" style="max-width:180px"><option value="7">7 дней</option><option value="30" selected>30 дней</option><option value="90">90 дней</option></select><button class="btn" id="refresh">Обновить</button><a class="btn ghost" href="/api/app/export/sales.csv" download>Выгрузить продажи CSV</a><span class="muted" id="stamp"></span></div>
+      <div class="btn-row"><select id="days" style="max-width:180px"><option value="7">7 дней</option><option value="30" selected>30 дней</option><option value="90">90 дней</option></select><button class="btn" id="refresh">${iconLabel("refresh", "Обновить")}</button><a class="btn ghost" href="/api/app/export/sales.csv" download>${iconLabel("download", "Выгрузить продажи CSV")}</a><span class="muted" id="stamp"></span></div>
       <div id="kpi"></div>
       <div class="split">
         <div>
