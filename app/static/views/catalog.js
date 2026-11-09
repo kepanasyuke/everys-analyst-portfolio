@@ -125,27 +125,30 @@ export default {
       if (event.key === "Enter") load(document.getElementById("search"));
     });
     document.getElementById("editor").addEventListener("click", async (event) => {
-      if (event.target.id === "save") {
+      const action = event.target.closest("#save, #restock, #remove");
+      if (!action) return;
+      if (action.id === "save") {
         const body = { prix_public: Number(document.getElementById("edit-prix").value), stock_actuel: Number(document.getElementById("edit-stock").value), seuil: Number(document.getElementById("edit-seuil").value), taux_remboursement: Number(document.getElementById("edit-taux").value) };
-        const result = await withSpinner(event.target, () => patch(`/api/app/products/${state.current}`, body));
+        const result = await withSpinner(action, () => patch(`/api/app/products/${state.current}`, body));
         if (!result.ok) document.getElementById("editor").insertAdjacentHTML("afterbegin", errorBox(result.error));
         await refresh(document.getElementById("search"));
       }
-      if (event.target.id === "restock") {
+      if (action.id === "restock") {
         const result = await withSpinner(event.target, () => post(`/api/app/products/${state.current}/restock`, { quantite: Number(document.getElementById("restock-qty").value) }));
         if (!result.ok) document.getElementById("editor").insertAdjacentHTML("afterbegin", errorBox(result.error));
         await refresh(document.getElementById("search"));
       }
-      if (event.target.id === "remove") {
-        const result = await withSpinner(event.target, () => remove(`/api/app/products/${state.current}?acteur=analyste`));
+      if (action.id === "remove") {
+        const result = await withSpinner(action, () => remove(`/api/app/products/${state.current}?acteur=analyste`));
         if (!result.ok) document.getElementById("editor").insertAdjacentHTML("afterbegin", errorBox(result.error));
         await refresh(document.getElementById("search"));
       }
     });
     document.getElementById("create-slot").addEventListener("click", async (event) => {
-      if (event.target.id !== "create") return;
+      const createButton = event.target.closest("#create");
+      if (!createButton) return;
       const body = { cip: document.getElementById("new-cip").value.trim(), nom: document.getElementById("new-nom").value.trim(), dci: document.getElementById("new-dci").value.trim(), categorie: document.getElementById("new-cat").value.trim() || "autre", prix_public: Number(document.getElementById("new-prix").value), stock_actuel: Number(document.getElementById("new-stock").value), seuil: Number(document.getElementById("new-seuil").value), taux_remboursement: Number(document.getElementById("new-taux").value) };
-      const result = await withSpinner(event.target, () => post("/api/app/products", body));
+      const result = await withSpinner(createButton, () => post("/api/app/products", body));
       if (!result.ok) document.getElementById("create-slot").insertAdjacentHTML("afterbegin", errorBox(result.error));
       await refresh(document.getElementById("search"));
     });

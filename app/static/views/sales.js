@@ -113,10 +113,14 @@ export default {
       if (button) openReturn(button.dataset.return);
     });
     document.getElementById("panel").addEventListener("click", async (event) => {
-      if (event.target.id === "cancel-return") document.getElementById("panel").innerHTML = "";
-      if (event.target.id !== "do-return") return;
+      const action = event.target.closest("#do-return, #cancel-return");
+      if (!action) return;
+      if (action.id === "cancel-return") {
+        document.getElementById("panel").innerHTML = "";
+        return;
+      }
       const lignes = [...document.querySelectorAll("[data-back]")].map((input) => ({ cip: input.dataset.back, quantite: Number(input.value) })).filter((line) => line.quantite > 0);
-      const result = await withSpinner(event.target, () => post(`/api/app/sales/${state.saleId}/return`, { lignes }));
+      const result = await withSpinner(action, () => post(`/api/app/sales/${state.saleId}/return`, { lignes }));
       document.getElementById("panel").innerHTML = result.ok ? `<div class="receipt"><strong>Возврат оформлен</strong><br>Продажа №${result.value.vente_id} · сумма возврата ${eur(result.value.montant)}<br>${result.value.lignes.map((line) => `${esc(line.nom)} × ${qty(line.quantite)}`).join("<br>")}</div>` : errorBox(result.error);
       await load(document.getElementById("apply"));
     });

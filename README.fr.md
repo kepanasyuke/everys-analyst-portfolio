@@ -271,6 +271,31 @@ combinaisons « écran × largeur », les libellés longs et les tableaux se rep
 
 ---
 
+## E2E avec Playwright
+
+```powershell
+npm install          # installe @playwright/test, aucun navigateur à télécharger
+npm run e2e          # 53 tests : 5 parcours + 48 contrôles de mise en page
+npm run e2e:headed   # idem avec fenêtre
+npm run screenshots  # régénère screenshots/view-*.png
+```
+
+Le navigateur utilisé est Edge déjà installé (`channel: "msedge"`), donc `playwright install` est inutile.
+`playwright.config.mjs` démarre uvicorn sur `127.0.0.1:8077` via `webServer` si le serveur ne tourne pas,
+sinon il réutilise celui qui écoute déjà.
+
+Couverture :
+
+- **parcours** (`e2e/flows.spec.mjs`) : vente du panier au ticket avec décrément du stock, retour partiel
+  depuis l'archive, commande de réassort au seuil, recherche et modification de prix au catalogue, ticket
+  imprimable ;
+- **mise en page** (`e2e/layout.spec.mjs`) : 16 écrans × 3 largeurs (1440 / 1100 / 390) — aucun débordement
+  horizontal ni élément hors fenêtre ;
+- les tests créent leurs propres articles via l'API, les données de démo restent intactes ; en cas d'échec,
+  trace et captures sont conservées dans `test-results/`.
+
+---
+
 ## Tests
 
 ```powershell
