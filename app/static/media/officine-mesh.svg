@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 440" width="720" height="440" role="img" aria-labelledby="meshTitle">
+  <title id="meshTitle">Фоновая графика приложения officine</title>
+  <defs>
+    <linearGradient id="meshBase" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fdfbff" />
+      <stop offset="0.55" stop-color="#ffffff" />
+      <stop offset="1" stop-color="#f6f0fb" />
+    </linearGradient>
+    <radialGradient id="meshViolet" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#9e12c9" stop-opacity="0.55" />
+      <stop offset="1" stop-color="#9e12c9" stop-opacity="0" />
+    </radialGradient>
+    <radialGradient id="meshGreen" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#4bd411" stop-opacity="0.45" />
+      <stop offset="1" stop-color="#4bd411" stop-opacity="0" />
+    </radialGradient>
+    <pattern id="meshGrid" width="30" height="30" patternUnits="userSpaceOnUse">
+      <path d="M30 0H0V30" fill="none" stroke="#e9dcf1" stroke-width="1" />
+    </pattern>
+    <pattern id="meshDots" width="14" height="14" patternUnits="userSpaceOnUse">
+      <circle cx="1.2" cy="1.2" r="1.2" fill="#cbb0dc" opacity="0.6" />
+    </pattern>
+  </defs>
+
+  <rect width="720" height="440" fill="url(#meshBase)" />
+  <rect width="720" height="440" fill="url(#meshGrid)" opacity="0.55" />
+  <ellipse cx="596" cy="74" rx="250" ry="200" fill="url(#meshViolet)" />
+  <ellipse cx="108" cy="392" rx="230" ry="176" fill="url(#meshGreen)" />
+  <rect x="36" y="36" width="200" height="120" fill="url(#meshDots)" opacity="0.5" />
+  <rect x="484" y="286" width="196" height="118" fill="url(#meshDots)" opacity="0.5" />
+
+  <g fill="none" stroke="#e2d2ee" stroke-width="1.2">
+    <path d="M-20 340 268 52" opacity="0.85" />
+    <path d="M-20 396 320 56" opacity="0.6" />
+    <path d="M420 440 716 144" opacity="0.7" />
+  </g>
+  <circle cx="596" cy="96" r="9" fill="#4bd411" opacity="0.55" />
+</svg>

@@ -1,0 +1,125 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 440" width="720" height="440" role="img" aria-labelledby="shotTitle shotDesc">
+  <title id="shotTitle">Экран кассы приложения officine</title>
+  <desc id="shotDesc">Наклонный мокап рабочего экрана: поиск по CIP13, корзина, сумма и проведение продажи.</desc>
+  <defs>
+    <filter id="shotShadow" x="-20%" y="-20%" width="140%" height="150%">
+      <feDropShadow dx="0" dy="16" stdDeviation="16" flood-color="#3b0a4a" flood-opacity="0.18" />
+    </filter>
+    <filter id="shotSoft" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#3b0a4a" flood-opacity="0.10" />
+    </filter>
+  </defs>
+
+  <g transform="translate(88 40) rotate(-2.4 264 168)">
+    <rect x="26" y="26" width="520" height="330" rx="10" fill="#f4e6f9" opacity="0.85" />
+
+    <g filter="url(#shotShadow)">
+      <rect x="0" y="0" width="520" height="330" rx="10" fill="#ffffff" stroke="#e6e6e6" />
+
+      <path d="M0 10a10 10 0 0 1 10-10h500a10 10 0 0 1 10 10v17H0z" fill="#fafafa" />
+      <circle cx="16" cy="13.5" r="3.4" fill="#e0574f" />
+      <circle cx="27" cy="13.5" r="3.4" fill="#e8b33c" />
+      <circle cx="38" cy="13.5" r="3.4" fill="#4bd411" />
+      <text x="60" y="17" font-family="Roboto, Arial, sans-serif" font-size="9" fill="#8a8a8a">officine · 127.0.0.1:8077/#/counter</text>
+
+      <line x1="0" y1="27" x2="520" y2="27" stroke="#e6e6e6" />
+
+      <g>
+        <rect x="10" y="38" width="8" height="16" rx="2.4" fill="#9e12c9" />
+        <rect x="19.5" y="38" width="8" height="16" rx="2.4" fill="#4bd411" />
+        <text x="33" y="51" font-family="Roboto, Arial, sans-serif" font-size="9" font-weight="600" letter-spacing="1.2" fill="#9e12c9">EVERYS</text>
+
+        <rect x="10" y="66" width="96" height="19" rx="5" fill="#f4e6f9" />
+        <rect x="17" y="72" width="7" height="7" rx="1.6" fill="none" stroke="#9e12c9" stroke-width="1.4" />
+        <text x="30" y="79" font-family="Roboto, Arial, sans-serif" font-size="8.5" fill="#7a0e9b">Рабочее место</text>
+
+        <rect x="10" y="90" width="96" height="19" rx="5" fill="#9e12c9" />
+        <rect x="17" y="96" width="7" height="7" rx="1.6" fill="none" stroke="#ffffff" stroke-width="1.4" />
+        <text x="30" y="103" font-family="Roboto, Arial, sans-serif" font-size="8.5" font-weight="500" fill="#ffffff">Касса</text>
+
+        <rect x="10" y="114" width="96" height="19" rx="5" fill="#f2f2f2" />
+        <rect x="17" y="120" width="7" height="7" rx="1.6" fill="none" stroke="#8a8a8a" stroke-width="1.4" />
+        <text x="30" y="127" font-family="Roboto, Arial, sans-serif" font-size="8.5" fill="#3d3d3d">Склад</text>
+
+        <rect x="10" y="138" width="96" height="19" rx="5" fill="#f2f2f2" />
+        <rect x="17" y="144" width="7" height="7" rx="1.6" fill="none" stroke="#8a8a8a" stroke-width="1.4" />
+        <text x="30" y="151" font-family="Roboto, Arial, sans-serif" font-size="8.5" fill="#3d3d3d">Возвраты</text>
+
+        <line x1="118" y1="27" x2="118" y2="330" stroke="#e6e6e6" />
+      </g>
+
+      <g>
+        <text x="130" y="52" font-family="Roboto, Arial, sans-serif" font-size="12" font-weight="600" fill="#000000">Касса</text>
+        <text x="130" y="64" font-family="Roboto, Arial, sans-serif" font-size="8" fill="#8a8a8a">Officine Brest · canal comptoir · роль фармацевт</text>
+
+        <rect x="130" y="74" width="228" height="22" rx="5" fill="#fafafa" stroke="#e6e6e6" />
+        <circle cx="142" cy="85" r="3.6" fill="none" stroke="#9e12c9" stroke-width="1.3" />
+        <line x1="144.6" y1="87.6" x2="147" y2="90" stroke="#9e12c9" stroke-width="1.3" stroke-linecap="round" />
+        <text x="153" y="88" font-family="Cascadia Mono, Consolas, monospace" font-size="8.5" fill="#3d3d3d">3400930459566</text>
+
+        <g>
+          <rect x="130" y="104" width="228" height="30" rx="5" fill="#ffffff" stroke="#e6e6e6" />
+          <text x="139" y="119" font-family="Roboto, Arial, sans-serif" font-size="8.5" font-weight="500" fill="#000000">Doliprane 1000 mg</text>
+          <text x="139" y="129" font-family="Roboto, Arial, sans-serif" font-size="7.5" fill="#8a8a8a">antalgique · остаток 10</text>
+          <rect x="316" y="112" width="34" height="14" rx="7" fill="#eaf9e2" />
+          <text x="324" y="122" font-family="Roboto, Arial, sans-serif" font-size="7.5" fill="#309406">5,00 €</text>
+        </g>
+
+        <g>
+          <rect x="130" y="140" width="228" height="30" rx="5" fill="#ffffff" stroke="#e6e6e6" />
+          <text x="139" y="155" font-family="Roboto, Arial, sans-serif" font-size="8.5" font-weight="500" fill="#000000">Amoxicilline 1 g</text>
+          <text x="139" y="165" font-family="Roboto, Arial, sans-serif" font-size="7.5" fill="#8a8a8a">antibiotique · остаток 6</text>
+          <rect x="316" y="148" width="34" height="14" rx="7" fill="#fdf3e2" />
+          <text x="324" y="158" font-family="Roboto, Arial, sans-serif" font-size="7.5" fill="#8a5a00">8,90 €</text>
+        </g>
+
+        <rect x="130" y="182" width="228" height="24" rx="5" fill="#ffffff" stroke="#ffffff" />
+        <text x="130" y="196" font-family="Roboto, Arial, sans-serif" font-size="7.5" fill="#8a8a8a">Скидка, %: 0 · лимит роли фармацевта — 30 %</text>
+
+        <rect x="130" y="214" width="228" height="26" rx="5" fill="#f6fdf1" stroke="#d8f0c4" />
+        <circle cx="143" cy="227" r="5.5" fill="#4bd411" />
+        <path d="m140.6 227 1.9 1.9 3.4-3.6" fill="none" stroke="#ffffff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
+        <text x="154" y="224" font-family="Roboto, Arial, sans-serif" font-size="8" font-weight="500" fill="#309406">Продажа №1407 проведена</text>
+        <text x="154" y="234" font-family="Roboto, Arial, sans-serif" font-size="7.5" fill="#3d3d3d">Итого 10,00 € · остаток списан · запись в журнале</text>
+
+        <text x="130" y="262" font-family="Roboto, Arial, sans-serif" font-size="7.5" fill="#8a8a8a">Последние продажи</text>
+        <line x1="130" y1="268" x2="358" y2="268" stroke="#efefef" />
+        <text x="130" y="282" font-family="Cascadia Mono, Consolas, monospace" font-size="7.5" fill="#3d3d3d">1407  2026-11-09  Brest      10,00 €</text>
+        <text x="130" y="296" font-family="Cascadia Mono, Consolas, monospace" font-size="7.5" fill="#3d3d3d">1406  2026-11-09  Rennes      4,40 €</text>
+        <line x1="130" y1="304" x2="358" y2="304" stroke="#efefef" />
+        <text x="130" y="318" font-family="Cascadia Mono, Consolas, monospace" font-size="7.5" fill="#3d3d3d">1405  2026-11-09  Brest      12,90 €</text>
+      </g>
+
+      <g filter="url(#shotSoft)">
+        <rect x="374" y="40" width="136" height="270" rx="7" fill="#ffffff" stroke="#e6e6e6" />
+        <text x="386" y="58" font-family="Roboto, Arial, sans-serif" font-size="9.5" font-weight="600" fill="#000000">Корзина</text>
+
+        <line x1="386" y1="66" x2="498" y2="66" stroke="#efefef" />
+        <text x="386" y="82" font-family="Roboto, Arial, sans-serif" font-size="8" fill="#000000">Doliprane 1000 mg</text>
+        <text x="386" y="92" font-family="Roboto, Arial, sans-serif" font-size="7.5" fill="#8a8a8a">2 × 5,00 €</text>
+
+        <rect x="386" y="102" width="112" height="18" rx="4" fill="#fafafa" stroke="#e6e6e6" />
+        <text x="392" y="114" font-family="Cascadia Mono, Consolas, monospace" font-size="7.5" fill="#3d3d3d">3400930459566</text>
+
+        <line x1="386" y1="134" x2="498" y2="134" stroke="#efefef" />
+        <text x="386" y="150" font-family="Roboto, Arial, sans-serif" font-size="8" fill="#8a8a8a">Скидка</text>
+        <text x="462" y="150" font-family="Cascadia Mono, Consolas, monospace" font-size="8" fill="#3d3d3d">0 %</text>
+
+        <text x="386" y="176" font-family="Roboto, Arial, sans-serif" font-size="8" fill="#8a8a8a">Итого</text>
+        <text x="436" y="178" font-family="Roboto, Arial, sans-serif" font-size="14" font-weight="600" fill="#000000">10,00 €</text>
+
+        <rect x="386" y="192" width="112" height="28" rx="14" fill="#9e12c9" />
+        <path d="m397 202 2.4 2.4 4.2-5" fill="none" stroke="#ffffff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+        <text x="409" y="209" font-family="Roboto, Arial, sans-serif" font-size="8" font-weight="500" fill="#ffffff">Провести продажу</text>
+
+        <rect x="386" y="228" width="112" height="20" rx="10" fill="#eaf9e2" />
+        <circle cx="397" cy="238" r="3" fill="#4bd411" />
+        <text x="405" y="241" font-family="Roboto, Arial, sans-serif" font-size="7.5" fill="#309406">транзакция цела</text>
+
+        <text x="386" y="266" font-family="Roboto, Arial, sans-serif" font-size="7.5" fill="#8a8a8a">Чек → печатная форма</text>
+        <rect x="386" y="274" width="112" height="20" rx="10" fill="#f4e6f9" />
+        <text x="400" y="287" font-family="Roboto, Arial, sans-serif" font-size="7.5" font-weight="500" fill="#7a0e9b">Открыть чек</text>
+      </g>
+    </g>
+  </g>
+</svg>

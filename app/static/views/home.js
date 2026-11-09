@@ -1,18 +1,72 @@
 import { esc, pct, stats, tag } from "../ui.js";
+import { icon, iconLabel } from "../icons.js";
 
 const APP_LINKS = [
-  ["Рабочее место", "app", "Выручка, дефицит, журнал действий"],
-  ["Каталог", "catalog", "Товары, цены, остатки, правка справочника"],
-  ["Касса", "counter", "Корзина, проведение продажи, отмена"],
-  ["Склад", "stock", "Пороги, пополнение, дефицит"],
-  ["Сеть аптек", "pharmacies", "Выручка и средний чек по офисинам"],
+  ["Рабочее место", "app", "Выручка, дефицит, журнал действий", "grid"],
+  ["Каталог", "catalog", "Товары, цены, остатки, правка справочника", "box"],
+  ["Касса", "counter", "Корзина, проведение продажи, отмена", "cart"],
+  ["Склад", "stock", "Пороги, пополнение, дефицит", "layers"],
+  ["Пополнение", "reorder", "Потребность по порогам, заказ одной транзакцией", "truck"],
+  ["Архив продаж", "sales", "Фильтры, чеки, частичные возвраты", "archive"],
+  ["Сеть аптек", "pharmacies", "Выручка и средний чек по офисинам", "pharmacy"],
 ];
+
+const FEATURES = [
+  ["cart", "Продажи в транзакции"],
+  ["undo", "Возвраты"],
+  ["truck", "Réassort"],
+  ["receipt", "Печатный чек"],
+  ["download", "CSV-выгрузки"],
+  ["history", "История движений"],
+];
+
+const KPIS = [
+  ["Экранов в приложении", "7"],
+  ["Аптек в сети", "12"],
+  ["Продаж в демо-базе", "1400"],
+  ["Тестов и E2E-проверок", "167"],
+];
+
+function feature(item) {
+  return `<li>${icon(item[0], 15)}<span>${esc(item[1])}</span></li>`;
+}
+
+function screenLink([title, slug, text, name]) {
+  return `<a class="card link" href="#/${slug}">
+    <span class="card-icon">${icon(name, 18)}</span>
+    <h3>${esc(title)}</h3>
+    <p>${esc(text)}</p>
+  </a>`;
+}
+
+function productCard() {
+  return `<section class="product">
+    <div class="product-cover">
+      <img class="product-mesh" src="/static/media/officine-mesh.svg" alt="" aria-hidden="true" />
+      <img class="product-shot" src="/static/media/officine-shot.svg" alt="Экран кассы: поиск по CIP13, корзина, сумма и кнопка «Провести продажу»" />
+      <span class="product-flag">${icon("check", 13)} демо-база · 1400 продаж</span>
+    </div>
+    <div class="product-body">
+      <img class="product-mark" src="/static/media/officine-mark.svg" alt="officine — приложение Everys WinPharma" />
+      <p class="lead">Рабочее место аптеки поверх SQLite: справочник, касса со списанием остатка,
+      возвраты, пополнение по порогам и сеть офисин. Продажа проходит в транзакции, каждое действие
+      пишется в журнал, роль в кассе ограничивает скидку.</p>
+      ${stats(KPIS)}
+      <ul class="product-features">${FEATURES.map(feature).join("")}</ul>
+      <div class="btn-row">
+        <a class="btn" href="#/counter">${iconLabel("cart", "Открыть кассу")}</a>
+        <a class="btn ghost" href="#/app">${iconLabel("grid", "Рабочее место")}</a>
+        <a class="btn ghost" href="/api/docs">${iconLabel("layers", "OpenAPI")}</a>
+      </div>
+    </div>
+  </section>`;
+}
 
 function appLinks() {
   return `<h2>Приложение officine — работает на демо-базе</h2>
-  <div class="card"><p>Пять экранов поверх SQLite: справочник, касса со списанием остатка,
-  склад с пополнением и сеть аптек. Все операции пишутся в журнал, продажа проходит в транзакции.</p>
-  <div class="grid">${APP_LINKS.map(([title, slug, text]) => `<a class="card link" href="#/${slug}"><h3>${esc(title)}</h3><p>${esc(text)}</p></a>`).join("")}</div></div>`;
+  ${productCard()}
+  <h2>Экраны приложения</h2>
+  <div class="grid">${APP_LINKS.map(screenLink).join("")}</div>`;
 }
 
 function card(project) {

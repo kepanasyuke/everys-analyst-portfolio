@@ -200,6 +200,10 @@ p {
 .hero p {
   color: var(--ink-soft);
   max-width: 68ch;
+  margin-bottom: 12px;
+}
+
+.hero p:last-child {
   margin-bottom: 0;
 }
 
@@ -892,4 +896,146 @@ td {
 
 a.btn {
   text-decoration: none;
+}
+
+/* --- продуктовая карточка приложения officine --- */
+.product {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  background: var(--surface);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  border-top: 4px solid var(--violet);
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.product-cover {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 22px;
+  min-height: 280px;
+}
+
+.product-mesh {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.product-shot {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 12px 18px rgba(59, 10, 74, 0.12));
+}
+
+.product-flag {
+  position: absolute;
+  left: 22px;
+  bottom: 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-card);
+  font-size: 12px;
+  color: var(--ink-soft);
+}
+
+.product-flag .icon {
+  color: var(--green-dark);
+}
+
+.product-body {
+  padding: 26px 28px 24px;
+  border-left: 1px solid var(--line);
+}
+
+.product-mark {
+  display: block;
+  width: 240px;
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 14px;
+}
+
+.product-body .lead {
+  font-size: 15px;
+  margin-bottom: 16px;
+}
+
+.product .stat-row {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.product .stat .k {
+  font-size: 10px;
+  letter-spacing: 0.6px;
+}
+
+.product-features {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 0;
+  margin: 0 0 4px;
+}
+
+.product-features li {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 11px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-pill);
+  background: var(--surface-alt);
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+
+.product-features .icon {
+  color: var(--violet);
+}
+
+.card-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  margin-bottom: 10px;
+  border-radius: 9px;
+  background: var(--violet-soft);
+  color: var(--violet);
+}
+
+.card.link:hover .card-icon {
+  background: var(--violet);
+  color: var(--surface);
+}
+
+@media (max-width: 980px) {
+  .product {
+    grid-template-columns: 1fr;
+  }
+
+  .product-body {
+    border-left: 0;
+    border-top: 1px solid var(--line);
+    padding: 22px;
+  }
+
+  .product-cover {
+    padding: 16px;
+    min-height: 0;
+  }
 }
