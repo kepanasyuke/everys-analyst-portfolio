@@ -21,6 +21,7 @@ const PATHS = {
   "chevron-left": '<path d="M14 6l-6 6 6 6"/>',
   "chevron-right": '<path d="M10 6l6 6-6 6"/>',
   alert: '<path d="M12 4 2.8 20h18.4z"/><path d="M12 10v4M12 17.4v.6"/>',
+  truck: '<path d="M3 7h11v9H3z"/><path d="M14 10h4l3 3v3h-7z"/><circle cx="7" cy="18" r="1.6"/><circle cx="17.5" cy="18" r="1.6"/>',
   dot: '<circle cx="12" cy="12" r="3"/>',
 };
 

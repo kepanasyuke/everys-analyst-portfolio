@@ -423,8 +423,9 @@ def pharmacies() -> list[dict]:
     return read("SELECT o.id, o.nom, o.ville, o.region, o.surface_m2, COUNT(v.id) AS ventes, COALESCE(ROUND(SUM(CASE WHEN v.statut = 'validee' THEN v.montant_ttc ELSE 0 END), 2), 0) AS ca, COALESCE(ROUND(AVG(CASE WHEN v.statut = 'validee' THEN v.montant_ttc END), 2), 0) AS panier FROM officines o LEFT JOIN ventes v ON v.officine_id = o.id GROUP BY o.id ORDER BY ca DESC")
 
 
-def journal(limit: int = 20) -> list[dict]:
-    return read("SELECT id, ts, acteur, action, cible, details FROM journal ORDER BY id DESC LIMIT ?", (limit,))
+def journal(limit: int = 20, action: str = "") -> list[dict]:
+    where, params = ("action = ?", [action]) if action else ("1=1", [])
+    return read(f"SELECT id, ts, acteur, action, cible, details FROM journal WHERE {where} ORDER BY id DESC LIMIT ?", (*params, limit))
 
 
 def overview(days: int = 30) -> dict:

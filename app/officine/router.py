@@ -6,7 +6,7 @@ from fastapi import APIRouter, HTTPException, Response
 from fastapi.responses import HTMLResponse
 from pydantic import BaseModel, Field
 
-from app.officine import exports, logic, receipt, returns
+from app.officine import exports, logic, receipt, reorder, returns
 from app.officine.errors import OfficineError
 
 router = APIRouter(prefix="/api/app", tags=["officine app"])
@@ -30,6 +30,16 @@ class ReturnRequest(BaseModel):
     lignes: list[Line] = Field(default_factory=list)
     acteur: str = Field(default="pharmacien", max_length=60)
     role: str = Field(default="pharmacien", pattern="^(pharmacien|titulaire)$")
+
+
+class ReorderLine(BaseModel):
+    cip: str = Field(min_length=1, max_length=20)
+    quantite: int = Field(ge=1, le=100000)
+
+
+class ReorderRequest(BaseModel):
+    lignes: list[ReorderLine] = Field(default_factory=list)
+    acteur: str = Field(default="pharmacien", max_length=60)
 
 
 class ProductRequest(BaseModel):
@@ -145,14 +155,24 @@ def sale_receipt(sale_id: int) -> str:
     return receipt.receipt_html(sale_id)
 
 
+@router.get("/reorder")
+def reorder_plan(limit: int = 60) -> dict:
+    return {"plan": reorder.plan(page_size(limit)), "recent": reorder.recent_orders(8)}
+
+
+@router.post("/reorder")
+def reorder_apply(payload: ReorderRequest) -> dict:
+    return guarded(lambda: reorder.create_order(payload.model_dump()))
+
+
 @router.get("/pharmacies")
 def pharmacies() -> dict:
     return {"items": logic.pharmacies()}
 
 
 @router.get("/journal")
-def journal(limit: int = 20) -> dict:
-    return {"items": logic.journal(page_size(limit))}
+def journal(limit: int = 20, action: str = "") -> dict:
+    return {"items": logic.journal(page_size(limit), action)}
 
 
 @router.get("/export/sales.csv")

@@ -6,6 +6,7 @@ import dashboard from "./views/dashboard.js";
 import catalog from "./views/catalog.js";
 import counter from "./views/counter.js";
 import stock from "./views/stock.js";
+import reorder from "./views/reorder.js";
 import pharmacies from "./views/pharmacies.js";
 import sales from "./views/sales.js";
 import p01 from "./views/p01.js";
@@ -19,7 +20,7 @@ import p08 from "./views/p08.js";
 
 const GROUPS = [
   { title: "", views: [home] },
-  { title: "Приложение officine", views: [dashboard, catalog, counter, stock, sales, pharmacies] },
+  { title: "Приложение officine", views: [dashboard, catalog, counter, stock, reorder, sales, pharmacies] },
   { title: "Портфолио · AI-инструменты", views: [p01, p02, p03, p04, p05, p06, p07, p08] },
 ];
 const VIEWS = GROUPS.flatMap((group) => group.views);
@@ -28,7 +29,7 @@ const nav = document.getElementById("nav");
 const root = document.getElementById("view");
 const state = { catalog: { projects: [], corpus: {}, ai: {} } };
 
-const NAV_ICONS = { home: "home", app: "grid", catalog: "box", counter: "cart", stock: "layers", sales: "archive", pharmacies: "pharmacy" };
+const NAV_ICONS = { home: "home", app: "grid", catalog: "box", counter: "cart", stock: "layers", reorder: "truck", sales: "archive", pharmacies: "pharmacy" };
 
 function link(view) {
   const name = NAV_ICONS[view.slug] || "sparkles";

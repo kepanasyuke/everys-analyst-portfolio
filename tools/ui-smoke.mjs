@@ -95,6 +95,7 @@ const CASES = [
   { file: "catalog.js", label: "A1 каталог", marker: "Стоимость выборки", button: "search" },
   { file: "counter.js", label: "A2 касса", marker: "остаток", button: null },
   { file: "stock.js", label: "A3 склад", marker: "Позиций под угрозой", button: "refresh" },
+  { file: "reorder.js", label: "A6 пополнение", marker: "Позиций к заказу", button: "refresh" },
   { file: "sales.js", label: "A5 архив", marker: "Продаж по фильтру", button: "apply" },
   { file: "pharmacies.js", label: "A4 сеть", marker: "Аптек в сети", button: "refresh" },
   { file: "p01.js", label: "P01 требования", marker: "Критерии приёмки", button: "run" },

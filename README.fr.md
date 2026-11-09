@@ -98,6 +98,7 @@ Le portfolio est devenu une application qui fonctionne : même base `data/offici
 | Catalogue (`#/catalog`) | Recherche nom/DCI/CIP13, prix et stock, réassort, nouvel article, suppression | `GET/POST /api/app/products`, `PATCH/DELETE /api/app/products/{cip}`, `POST …/restock` |
 | Caisse (`#/counter`) | Panier, remise, vente, ticket, annulation | `GET/POST /api/app/sales`, `POST /api/app/sales/{id}/cancel` |
 | Stock (`#/stock`) | Articles sous le seuil, réassort rapide | `GET /api/app/stock` |
+| Réassort (`#/reorder`) | Besoin calculé par seuil et commande en une transaction | `GET/POST /api/app/reorder` |
 | Réseau (`#/pharmacies`) | CA et panier moyen des 12 officines | `GET /api/app/pharmacies` |
 
 **Invariants tenus par le backend** (27 tests dans `tests/test_officine.py`) :
@@ -150,6 +151,16 @@ Les données sont modifiables : `python tools/seed.py` restaure l'état initial 
   article sous le seuil.
 - Clavier : `Entrée` dans la recherche du catalogue, `Entrée` sur les dates de l'archive.
 - `tools/audit_ui.py` vérifie que chaque icône utilisée existe dans le jeu.
+
+---
+
+### Réassort par seuil
+
+L'écran `#/reorder` calcule le besoin selon la règle « seuil × 2 moins le stock, minimum 5 unités », affiche
+la répartition par catégorie et la rupture totale. Les quantités se corrigent dans le tableau ; la commande
+s'applique en une transaction : les stocks montent, le journal enregistre `stock.reorder` avec le numéro de
+lot, le nombre de positions et d'unités. Le journal se filtre par action —
+`GET /api/app/journal?action=stock.reorder`.
 
 ---
 
@@ -264,7 +275,7 @@ combinaisons « écran × largeur », les libellés longs et les tableaux se rep
 
 ```powershell
 $env:PYTHONPATH = "."
-python -m pytest -q      # 100 passed : noyau IA, huit projets et application officine
+python -m pytest -q      # 114 passed : noyau IA, huit projets et application officine
 python tools/smoke.py    # 14 contrôles API, tous en 200
 python tools/audit_ui.py # cohérence id / endpoints / statique du frontend
 node tools/ui-smoke.mjs  # 14 écrans rendus contre le serveur réel

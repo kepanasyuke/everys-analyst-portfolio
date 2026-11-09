@@ -199,3 +199,25 @@ def test_discount_above_limit_needs_titulaire(client) -> None:
 def test_titulaire_discount_is_accepted(client) -> None:
     sale = titulaire_sale(client)
     assert sale["montant_ttc"] == 6.0 and sale["statut"] == "validee"
+
+def reorder_plan(client) -> dict:
+    return client.get("/api/app/reorder").json()
+
+
+def ordered(client, quantite: int = 5) -> dict:
+    seeded(client)
+    return client.post("/api/app/reorder", json={"lignes": [{"cip": CIP, "quantite": quantite}]}).json()
+
+
+def test_reorder_plan_describes_rule(client) -> None:
+    assert "порог" in reorder_plan(client)["plan"]["rule"]
+
+
+def test_reorder_apply_increases_stock(client) -> None:
+    ordered(client, 5)
+    assert stock(client) == 15
+
+
+def test_reorder_writes_journal_action(client) -> None:
+    ordered(client, 5)
+    assert client.get("/api/app/journal", params={"action": "stock.reorder"}).json()["items"][0]["action"] == "stock.reorder"
