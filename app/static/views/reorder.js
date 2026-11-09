@@ -34,6 +34,10 @@ function note(plan) {
   return `<div class="note">Расчёт на ${esc(plan.generated_at)}: ${esc(plan.rule)}. Количество можно изменить перед оформлением — заказ применяется одной транзакцией и пишется в журнал.</div>`;
 }
 
+function receiptBlock(result) {
+  return `<div class="receipt"><strong>Заказ №${esc(result.batch)} оформлен</strong><br>Позиций: ${qty(result.positions)} · штук: ${qty(result.units)}</div>`;
+}
+
 export default {
   slug: "reorder",
   code: "A6",
@@ -45,9 +49,9 @@ export default {
       <div class="btn-row"><button class="btn" id="refresh">${iconLabel("refresh", "Обновить")}</button><button class="btn green" id="order">${iconLabel("check", "Оформить заказ")}</button></div>
       <div id="out"></div>`;
 
-    const load = async (button) => {
+    const load = async (button, banner = "") => {
       const result = await withSpinner(button, () => get("/api/app/reorder?limit=60"));
-      document.getElementById("out").innerHTML = result.ok ? block(result.value) : errorBox(result.error);
+      document.getElementById("out").innerHTML = result.ok ? banner + block(result.value) : errorBox(result.error);
     };
 
     document.getElementById("refresh").addEventListener("click", (event) => load(event.currentTarget));
@@ -62,8 +66,9 @@ export default {
         document.getElementById("out").insertAdjacentHTML("afterbegin", errorBox(result.error));
         return;
       }
-      document.getElementById("out").insertAdjacentHTML("afterbegin", `<div class="receipt"><strong>Заказ №${result.value.batch} оформлен</strong><br>Позиций: ${qty(result.value.positions)} · штук: ${qty(result.value.units)}</div>`);
-      await load(document.getElementById("refresh"));
+      const banner = receiptBlock(result.value);
+      document.getElementById("out").insertAdjacentHTML("afterbegin", banner);
+      await load(document.getElementById("refresh"), banner);
     });
     await load(document.getElementById("refresh"));
   },

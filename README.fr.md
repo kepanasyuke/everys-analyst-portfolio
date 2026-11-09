@@ -122,6 +122,27 @@ Les données sont modifiables : `python tools/seed.py` restaure l'état initial 
 
 ---
 
+### Scénarios animés
+
+Enregistrés avec Playwright sur l'application réelle (`127.0.0.1:8077`), pas des maquettes :
+
+| Scénario | Ce qu'on voit |
+|----------|---------------|
+| Vente en caisse | recherche par CIP13 → article au panier → quantité 2 → validation, stock décrémenté, ticket dans « Dernières ventes » |
+| Retour depuis l'archive | ligne de vente → panneau de retour avec la quantité disponible → retour de 1 unité, marchandise de nouveau en stock |
+| Réassort par seuil | article à stock nul → commande en une transaction → confirmation « Commande n°N enregistrée » et ligne dans le journal |
+
+![Vente en caisse](assets/demo-sale.gif)
+
+![Retour depuis l'archive des ventes](assets/demo-return.gif)
+
+![Réassort par seuil](assets/demo-reorder.gif)
+
+Les captures de frames sont prises par `tools/record-demos.mjs` (Playwright + Edge), les GIF sont
+assemblés par `tools/build-gifs.py` (Pillow, 900 px, 180 ms par image).
+
+---
+
 ### Retours, archive et exports
 
 - **Retours** (`POST /api/app/sales/{id}/return`) : partiels ou complets. Le montant est recalculé avec
